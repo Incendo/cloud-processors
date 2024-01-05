@@ -24,6 +24,7 @@
 package org.incendo.cloud.processors.confirmation.annotations;
 
 import cloud.commandframework.Command;
+import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.annotations.BuilderModifier;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -48,6 +49,16 @@ public final class ConfirmationBuilderModifier<C> implements BuilderModifier<Con
      */
     public static <C> @NonNull BuilderModifier<Confirmation, C> of() {
         return new ConfirmationBuilderModifier<>();
+    }
+
+    /**
+     * Adds the confirmation builder modifier to the given {@code annotationParser}.
+     *
+     * @param <C>              command sender type
+     * @param annotationParser annotation parser to add the builder modifier to
+     */
+    public static <C> void install(final @NonNull AnnotationParser<C> annotationParser) {
+        annotationParser.registerBuilderModifier(Confirmation.class, of());
     }
 
     private ConfirmationBuilderModifier() {

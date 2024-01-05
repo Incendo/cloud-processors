@@ -118,7 +118,7 @@ public final class ConfirmationManager<C> implements Command.Builder.Applicable<
      * @param sender command sender
      * @return optional containing the value if it exists and has not yet expired
      */
-    @NonNull Optional<ConfirmationContext<C>> popPending(final @NonNull C sender) {
+    public @NonNull Optional<ConfirmationContext<C>> popPending(final @NonNull C sender) {
         final ConfirmationContext<C> context = this.cache.popIfPresent(sender);
         if (context == null) {
             return Optional.empty();
