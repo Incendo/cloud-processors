@@ -32,8 +32,8 @@ import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import org.incendo.cloud.processors.confirmation.util.TestCommandManager;
 import org.incendo.cloud.processors.confirmation.util.TestCommandSender;
+import org.incendo.cloud.processors.cooldown.Cooldown;
 import org.incendo.cloud.processors.cooldown.CooldownConfiguration;
-import org.incendo.cloud.processors.cooldown.CooldownDecorator;
 import org.incendo.cloud.processors.cooldown.CooldownGroup;
 import org.incendo.cloud.processors.cooldown.CooldownManager;
 import org.incendo.cloud.processors.cooldown.CooldownNotifier;
@@ -83,8 +83,7 @@ class CooldownManagerTest {
     @Test
     void testAppliesCooldown() {
         // Arrange
-        final CooldownDecorator<TestCommandSender> decorator = CooldownDecorator.of(DurationFunction
-                .constant(Duration.ofHours(1L)));
+        final Cooldown<TestCommandSender> decorator = Cooldown.of(DurationFunction.constant(Duration.ofHours(1L)));
         this.commandManager.command(
                 this.commandManager.commandBuilder("command")
                         .apply(decorator)
@@ -106,8 +105,7 @@ class CooldownManagerTest {
     @Test
     void testCooldownExpired() {
         // Arrange
-        final CooldownDecorator<TestCommandSender> decorator = CooldownDecorator.of(DurationFunction
-                .constant(Duration.ofHours(1L)));
+        final Cooldown<TestCommandSender> decorator = Cooldown.of(DurationFunction.constant(Duration.ofHours(1L)));
         this.commandManager.command(
                 this.commandManager.commandBuilder("command")
                         .apply(decorator)
@@ -128,11 +126,11 @@ class CooldownManagerTest {
 
     @Test
     void testCooldownGroupsDifferentGroups() {
-        final CooldownDecorator<TestCommandSender> decorator1 = CooldownDecorator.of(
+        final Cooldown<TestCommandSender> decorator1 = Cooldown.of(
                 DurationFunction.constant(Duration.ofHours(1L)),
                 CooldownGroup.named("foo")
         );
-        final CooldownDecorator<TestCommandSender> decorator2 = CooldownDecorator.of(
+        final Cooldown<TestCommandSender> decorator2 = Cooldown.of(
                 DurationFunction.constant(Duration.ofHours(1L)),
                 CooldownGroup.named("bar")
         );
@@ -161,7 +159,7 @@ class CooldownManagerTest {
 
     @Test
     void testCooldownGroupsSameGroup() {
-        final CooldownDecorator<TestCommandSender> decorator = CooldownDecorator.of(
+        final Cooldown<TestCommandSender> decorator = Cooldown.of(
                 DurationFunction.constant(Duration.ofHours(1L)),
                 CooldownGroup.named("foo")
         );

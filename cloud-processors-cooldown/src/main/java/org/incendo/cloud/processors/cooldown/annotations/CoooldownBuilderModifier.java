@@ -29,7 +29,6 @@ import cloud.commandframework.annotations.BuilderModifier;
 import java.time.Duration;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.processors.cooldown.CooldownDecorator;
 import org.incendo.cloud.processors.cooldown.CooldownGroup;
 import org.incendo.cloud.processors.cooldown.DurationFunction;
 
@@ -71,12 +70,13 @@ public final class CoooldownBuilderModifier<C> implements BuilderModifier<Cooldo
             final Command.@NonNull Builder<C> builder
     ) {
         final DurationFunction<C> duration = DurationFunction.constant(Duration.of(annotation.duration(), annotation.timeUnit()));
-        final CooldownDecorator<C> cooldownDecorator;
+        final org.incendo.cloud.processors.cooldown.Cooldown<C> cooldown;
         if (annotation.group().isBlank()) {
-            cooldownDecorator = CooldownDecorator.of(duration);
+            cooldown = org.incendo.cloud.processors.cooldown.Cooldown.<C>builder().duration(duration).build();
         } else {
-            cooldownDecorator = CooldownDecorator.of(duration, CooldownGroup.named(annotation.group()));
+            cooldown = org.incendo.cloud.processors.cooldown.Cooldown.<C>builder().duration(duration)
+                    .group(CooldownGroup.named(annotation.group())).build();
         }
-        return builder.apply(cooldownDecorator);
+        return builder.apply(cooldown);
     }
 }

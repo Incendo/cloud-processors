@@ -32,7 +32,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 final class CooldownProfileImpl implements CooldownProfile {
 
-    private final Map<CooldownGroup, Cooldown> cooldowns;
+    private final Map<CooldownGroup, CooldownInstance> cooldowns;
     private final Clock clock;
 
     CooldownProfileImpl(final @NonNull Clock clock) {
@@ -41,8 +41,8 @@ final class CooldownProfileImpl implements CooldownProfile {
     }
 
     @Override
-    public synchronized @Nullable Cooldown getCooldown(@NonNull final CooldownGroup group) {
-        final Cooldown cooldown = this.cooldowns.get(group);
+    public synchronized @Nullable CooldownInstance getCooldown(@NonNull final CooldownGroup group) {
+        final CooldownInstance cooldown = this.cooldowns.get(group);
         if (cooldown == null) {
             return null;
         }
@@ -56,7 +56,7 @@ final class CooldownProfileImpl implements CooldownProfile {
     }
 
     @Override
-    public synchronized void setCooldown(@NonNull final CooldownGroup group, @NonNull final Cooldown cooldown) {
+    public synchronized void setCooldown(@NonNull final CooldownGroup group, @NonNull final CooldownInstance cooldown) {
         this.cooldowns.put(group, cooldown);
     }
 }

@@ -23,7 +23,6 @@
 //
 package org.incendo.cloud.processors.cooldown;
 
-import cloud.commandframework.Command;
 import cloud.commandframework.execution.postprocessor.CommandPostprocessor;
 import cloud.commandframework.keys.CloudKey;
 import io.leangen.geantyref.TypeToken;
@@ -41,20 +40,12 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public final class CooldownManager<C> {
 
     /**
-     * Meta that adds a cooldown of the given duration to the command.
+     * Meta that adds the given cooldown to the command.
      */
-    public static final CloudKey<DurationFunction<?>> META_COOLDOWN_DURATION = CloudKey.of(
+    public static final CloudKey<Cooldown<?>> META_COOLDOWN_DURATION = CloudKey.of(
             "cloud:cooldown_duration",
-            new TypeToken<DurationFunction<?>>() {
+            new TypeToken<Cooldown<?>>() {
             }
-    );
-    /**
-     * Meta that specifies the cooldown group for the command. If the meta value is not present, then
-     * {@link CooldownGroup#command(Command)} will be used.
-     */
-    public static final CloudKey<CooldownGroup> META_COOLDOWN_GROUP = CloudKey.of(
-            "cloud:cooldown_group",
-            CooldownGroup.class
     );
 
     /**

@@ -23,50 +23,79 @@
 //
 package org.incendo.cloud.processors.cooldown;
 
-import java.time.Duration;
-import java.time.Instant;
+import cloud.commandframework.Command;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.immutables.value.Value;
 import org.incendo.cloud.processors.immutables.StagedImmutableBuilder;
 
 /**
  * An instance of a cooldown for a {@link CooldownGroup} belonging to a command sender.
  *
+ * @param <C> command sender type
  * @since 1.0.0
  */
 @StagedImmutableBuilder
 @Value.Immutable
 @API(status = API.Status.STABLE, since = "1.0.0")
-public interface Cooldown {
+public interface Cooldown<C> extends Command.Builder.Applicable<C> {
+
+    /**
+     * Returns a new cooldown with the given {@code duration} using {@link CooldownGroup#command(Command)} as the group.
+     *
+     * @param <C>      command sender type
+     * @param duration the duration
+     * @return the cooldown
+     */
+    static <C> @NonNull Cooldown<C> of(final @NonNull DurationFunction<C> duration) {
+        return Cooldown.<C>builder().duration(duration).build();
+    }
+
+    /**
+     * Returns a new cooldown with the given {@code duration} and {@code group}.
+     *
+     * @param <C>      command sender type
+     * @param duration the duration
+     * @param group    cooldown group
+     * @return the cooldown
+     */
+    static <C> @NonNull Cooldown<C> of(
+            final @NonNull DurationFunction<C> duration,
+            final @NonNull CooldownGroup group
+    ) {
+        return Cooldown.<C>builder().duration(duration).group(group).build();
+    }
 
     /**
      * Returns a new cooldown builder.
      *
+     * @param <C> command sender type
      * @return the builder
      */
-    static ImmutableCooldown.@NonNull GroupBuildStage builder() {
+    static <C> ImmutableCooldown.@NonNull DurationBuildStage<C> builder() {
         return ImmutableCooldown.builder();
     }
-
-    /**
-     * Returns the group that this instance belongs to.
-     *
-     * @return the cooldown group
-     */
-    @NonNull CooldownGroup group();
 
     /**
      * Returns the cooldown duration.
      *
      * @return the duration
      */
-    @NonNull Duration duration();
+    @NonNull DurationFunction<C> duration();
 
     /**
-     * Returns the time that the cooldown was created.
+     * Returns the group that this instance belongs to.
+     * If set to {@code null} then {@link CooldownGroup#command(Command)} will be used.
      *
-     * @return the creation time
+     * @return the cooldown group
      */
-    @NonNull Instant creationTime();
+    default @Nullable CooldownGroup group() {
+        return null;
+    }
+
+    @Override
+    default Command.@NonNull Builder<C> applyToCommandBuilder(Command.@NonNull Builder<C> builder) {
+        return builder.meta(CooldownManager.META_COOLDOWN_DURATION, this);
+    }
 }

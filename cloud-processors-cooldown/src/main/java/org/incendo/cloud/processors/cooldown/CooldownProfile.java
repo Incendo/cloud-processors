@@ -47,7 +47,7 @@ public interface CooldownProfile {
      * @param group group that identifies the cooldown
      * @return the active cooldown, or {@code null}
      */
-    @Nullable Cooldown getCooldown(@NonNull CooldownGroup group);
+    @Nullable CooldownInstance getCooldown(@NonNull CooldownGroup group);
 
     /**
      * Sets the cooldown for the given {@code group}.
@@ -55,5 +55,5 @@ public interface CooldownProfile {
      * @param group    group that identifies the cooldown
      * @param cooldown cooldown value
      */
-    void setCooldown(@NonNull CooldownGroup group, @NonNull Cooldown cooldown);
+    void setCooldown(@NonNull CooldownGroup group, @NonNull CooldownInstance cooldown);
 }

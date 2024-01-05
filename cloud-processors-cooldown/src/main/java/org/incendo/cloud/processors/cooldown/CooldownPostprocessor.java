@@ -28,6 +28,7 @@ import cloud.commandframework.execution.postprocessor.CommandPostprocessor;
 import cloud.commandframework.services.types.ConsumerService;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Objects;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -49,9 +50,8 @@ final class CooldownPostprocessor<C> implements CommandPostprocessor<C> {
     @Override
     @SuppressWarnings("unchecked")
     public void accept(final @NonNull CommandPostprocessingContext<C> context) {
-        final DurationFunction<?> cooldownDurationFunction = context.command().commandMeta()
-                .getOrDefault(CooldownManager.META_COOLDOWN_DURATION, null);
-        if (cooldownDurationFunction == null) {
+        final Cooldown<?> cooldown = context.command().commandMeta().getOrDefault(CooldownManager.META_COOLDOWN_DURATION, null);
+        if (cooldown == null) {
             return;
         }
 
@@ -59,30 +59,31 @@ final class CooldownPostprocessor<C> implements CommandPostprocessor<C> {
             return;
         }
 
-        final CooldownGroup group = context.command().commandMeta().getOrSupplyDefault(CooldownManager.META_COOLDOWN_GROUP,
-                () -> CooldownGroup.command(context.command()));
-
         final CooldownProfile profile = this.confirmationManager.repository().getProfile(context.commandContext().sender());
+        final CooldownGroup group;
+        if (cooldown.group() != null) {
+            group = Objects.requireNonNull(cooldown.group(), "group");
+        } else {
+            group = CooldownGroup.command(context.command());
+        }
 
-        final Cooldown cooldown = profile.getCooldown(group);
-        if (cooldown != null) {
-            final Instant endTime = cooldown.creationTime().plus(cooldown.duration());
+        final CooldownInstance cooldownInstance = profile.getCooldown(group);
+        if (cooldownInstance != null) {
+            final Instant endTime = cooldownInstance.creationTime().plus(cooldownInstance.duration());
             this.confirmationManager.configuration().cooldownNotifier().notify(
                     context.commandContext().sender(),
-                    cooldown,
+                    cooldownInstance,
                     Duration.between(Instant.now(this.confirmationManager.configuration().clock()), endTime)
             );
             ConsumerService.interrupt();
             return;
         }
 
-        profile.setCooldown(
-                group,
-                Cooldown.builder()
-                        .group(group)
-                        .duration(((DurationFunction<C>) cooldownDurationFunction).getDuration(context.commandContext()))
-                        .creationTime(Instant.now(this.confirmationManager.configuration().clock()))
-                        .build()
-        );
+        final CooldownInstance instance = CooldownInstance.builder()
+                .group(group)
+                .duration(((DurationFunction<C>) cooldown.duration()).getDuration(context.commandContext()))
+                .creationTime(Instant.now(this.confirmationManager.configuration().clock()))
+                .build();
+        profile.setCooldown(group, instance);
     }
 }

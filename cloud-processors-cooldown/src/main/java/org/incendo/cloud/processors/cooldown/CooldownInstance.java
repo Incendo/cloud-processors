@@ -24,34 +24,49 @@
 package org.incendo.cloud.processors.cooldown;
 
 import java.time.Duration;
+import java.time.Instant;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.immutables.value.Value;
+import org.incendo.cloud.processors.immutables.StagedImmutableBuilder;
 
 /**
- * Notifies command senders that they have an active cooldown.
+ * An instance of a {@link Cooldown}.
  *
- * @param <C> command sender type
  * @since 1.0.0
  */
+@StagedImmutableBuilder
+@Value.Immutable
 @API(status = API.Status.STABLE, since = "1.0.0")
-public interface CooldownNotifier<C> {
+public interface CooldownInstance {
 
     /**
-     * Returns a notifier that does nothing.
+     * Returns a new cooldown instance builder.
      *
-     * @param <C> command sender type
-     * @return the notifier
+     * @return the builder
      */
-    static <C> @NonNull CooldownNotifier<C> noOp() {
-        return (sender, cooldown, remainingTime) -> {};
+    static ImmutableCooldownInstance.@NonNull GroupBuildStage builder() {
+        return ImmutableCooldownInstance.builder();
     }
 
     /**
-     * Notifies the given {@code sender} that they have an active cooldown preventing them from using the command.
+     * Returns the cooldown group.
      *
-     * @param sender        command sender to notify
-     * @param cooldown      cooldown instance
-     * @param remainingTime remaining time
+     * @return the group
      */
-    void notify(@NonNull C sender, @NonNull CooldownInstance cooldown, @NonNull Duration remainingTime);
+    @NonNull CooldownGroup group();
+
+    /**
+     * Returns the cooldown duration.
+     *
+     * @return the duration
+     */
+    @NonNull Duration duration();
+
+    /**
+     * Returns the creation time.
+     *
+     * @return the creation time
+     */
+    @NonNull Instant creationTime();
 }
