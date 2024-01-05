@@ -29,5 +29,10 @@ dependencies {
     annotationProcessor(libs.immutables)
 
     // test dependencies
+    testImplementation(libs.jupiter.engine)
+    testImplementation(libs.jupiter.params)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.jupiter)
     testImplementation(libs.truth)
+    testImplementation(libs.truth.java8)
 }

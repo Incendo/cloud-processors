@@ -47,6 +47,16 @@ import org.incendo.cloud.processors.immutables.StagedImmutableBuilder;
 public interface ConfirmationConfiguration<C> {
 
     /**
+     * Returns a new configuration builder.
+     *
+     * @param <C> command sender type
+     * @return the builder
+     */
+    static <C> ImmutableConfirmationConfiguration.@NonNull CacheBuildStage<C> builder() {
+        return ImmutableConfirmationConfiguration.<C>builder();
+    }
+
+    /**
      * Returns the cache used to store pending commands.
      *
      * @return the cache

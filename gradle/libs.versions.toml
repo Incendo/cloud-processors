@@ -18,6 +18,9 @@ guava = "33.0.0-jre"
 immutables = "2.10.0"
 
 # Test
+jupiterEngine = "5.10.1"
+mockitoCore = "4.11.0"
+mockitoJupiter = "4.11.0"
 truth = "1.1.4"
 
 [libraries]
@@ -34,6 +37,11 @@ guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 immutables = { group = "org.immutables", name = "value", version.ref = "immutables" }
 
 # Test
+jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "jupiterEngine" }
+jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "jupiterEngine" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoCore" }
+mockito-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockitoJupiter" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+truth-java8 = { group = "com.google.truth.extensions", name = "truth-java8-extension", version.ref = "truth" }
 
 [bundles]
