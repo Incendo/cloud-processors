@@ -21,7 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.cooldown;
+package org.incendo.cloud.processors.cooldown.profile;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.incendo.cloud.processors.cooldown.CooldownGroup;
+import org.incendo.cloud.processors.cooldown.CooldownInstance;
 
 final class CooldownProfileImpl implements CooldownProfile {
 

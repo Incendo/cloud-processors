@@ -31,6 +31,7 @@ import java.time.Instant;
 import java.util.Objects;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.processors.cooldown.profile.CooldownProfile;
 
 /**
  * {@link CommandPostprocessor} for {@link CooldownManager}.
@@ -41,10 +42,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 @API(status = API.Status.INTERNAL, since = "1.0.0")
 final class CooldownPostprocessor<C> implements CommandPostprocessor<C> {
 
-    private final CooldownManager<C> confirmationManager;
+    private final CooldownManager<C> cooldownManager;
 
-    CooldownPostprocessor(final @NonNull CooldownManager<C> confirmationManager) {
-        this.confirmationManager = confirmationManager;
+    CooldownPostprocessor(final @NonNull CooldownManager<C> cooldownManager) {
+        this.cooldownManager = cooldownManager;
     }
 
     @Override
@@ -55,11 +56,14 @@ final class CooldownPostprocessor<C> implements CommandPostprocessor<C> {
             return;
         }
 
-        if (this.confirmationManager.configuration().bypassCooldown().test(context.commandContext())) {
+        if (this.cooldownManager.configuration().bypassCooldown().test(context.commandContext())) {
             return;
         }
 
-        final CooldownProfile profile = this.confirmationManager.repository().getProfile(context.commandContext().sender());
+        final CooldownProfile profile = this.cooldownManager.repository().getProfile(
+                context.commandContext().sender(),
+                this.cooldownManager.configuration().profileFactory()
+        );
         final CooldownGroup group;
         if (cooldown.group() != null) {
             group = Objects.requireNonNull(cooldown.group(), "group");
@@ -70,10 +74,10 @@ final class CooldownPostprocessor<C> implements CommandPostprocessor<C> {
         final CooldownInstance cooldownInstance = profile.getCooldown(group);
         if (cooldownInstance != null) {
             final Instant endTime = cooldownInstance.creationTime().plus(cooldownInstance.duration());
-            this.confirmationManager.configuration().cooldownNotifier().notify(
+            this.cooldownManager.configuration().cooldownNotifier().notify(
                     context.commandContext().sender(),
                     cooldownInstance,
-                    Duration.between(Instant.now(this.confirmationManager.configuration().clock()), endTime)
+                    Duration.between(Instant.now(this.cooldownManager.configuration().clock()), endTime)
             );
             ConsumerService.interrupt();
             return;
@@ -82,7 +86,7 @@ final class CooldownPostprocessor<C> implements CommandPostprocessor<C> {
         final CooldownInstance instance = CooldownInstance.builder()
                 .group(group)
                 .duration(((DurationFunction<C>) cooldown.duration()).getDuration(context.commandContext()))
-                .creationTime(Instant.now(this.confirmationManager.configuration().clock()))
+                .creationTime(Instant.now(this.cooldownManager.configuration().clock()))
                 .build();
         profile.setCooldown(group, instance);
     }

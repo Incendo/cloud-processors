@@ -23,13 +23,14 @@
 //
 package org.incendo.cloud.processors.cooldown;
 
-import java.time.Clock;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.processors.cache.CloudCache;
+import org.incendo.cloud.processors.cooldown.profile.CooldownProfile;
+import org.incendo.cloud.processors.cooldown.profile.CooldownProfileFactory;
 
 /**
  * Repository that stores {@link CooldownProfile cooldown profiles} identifies by keys of type {@link K}.
@@ -71,22 +72,7 @@ public interface CooldownRepository<K> {
      * @return the repository
      */
     static <K> @NonNull CooldownRepository<K> forCache(final @NonNull CloudCache<K, CooldownProfile> cache) {
-        return new CacheCooldownRepository<>(Objects.requireNonNull(cache, "cache"), Clock.systemUTC());
-    }
-
-    /**
-     * Returns a new repository backed by the given {@code cache}.
-     *
-     * @param <K>   key type
-     * @param cache backing cache
-     * @param clock clock used to retrieve current time
-     * @return the repository
-     */
-    static <K> @NonNull CooldownRepository<K> forCache(
-            final @NonNull CloudCache<K, CooldownProfile> cache,
-            final @NonNull Clock clock
-    ) {
-        return new CacheCooldownRepository<>(Objects.requireNonNull(cache, "cache"), Objects.requireNonNull(clock, "clock"));
+        return new CacheCooldownRepository<>(Objects.requireNonNull(cache, "cache"));
     }
 
     /**
@@ -97,22 +83,7 @@ public interface CooldownRepository<K> {
      * @return the repository
      */
     static <K> @NonNull CooldownRepository<K> forMap(final @NonNull Map<K, CooldownProfile> map) {
-        return new MapCooldownRepository<>(Objects.requireNonNull(map, "map"), Clock.systemUTC());
-    }
-
-    /**
-     * Returns a new repository backed by the given {@code map}.
-     *
-     * @param <K>   key type
-     * @param map   backing map
-     * @param clock clock used to retrieve current time
-     * @return the repository
-     */
-    static <K> @NonNull CooldownRepository<K> forMap(
-            final @NonNull Map<K, CooldownProfile> map,
-            final @NonNull Clock clock
-    ) {
-        return new MapCooldownRepository<>(Objects.requireNonNull(map, "map"), Objects.requireNonNull(clock, "clock"));
+        return new MapCooldownRepository<>(Objects.requireNonNull(map, "map"));
     }
 
     /**
@@ -120,10 +91,11 @@ public interface CooldownRepository<K> {
      *
      * <p>If no profile exists in the repository, a new profile will be persisted and returned.</p>
      *
-     * @param key key that identifies the profile
+     * @param key            key that identifies the profile
+     * @param profileFactory factory that creates profiles
      * @return the profile
      */
-    @NonNull CooldownProfile getProfile(@NonNull K key);
+    @NonNull CooldownProfile getProfile(@NonNull K key, @NonNull CooldownProfileFactory profileFactory);
 
 
     final class MappingCooldownRepository<C, K> implements CooldownRepository<C> {
@@ -141,48 +113,38 @@ public interface CooldownRepository<K> {
         }
 
         @Override
-        public @NonNull CooldownProfile getProfile(final @NonNull C key) {
-            return this.otherRepository.getProfile(this.mappingFunction.apply(key));
+        public @NonNull CooldownProfile getProfile(final @NonNull C key, final @NonNull CooldownProfileFactory profileFactory) {
+            return this.otherRepository.getProfile(this.mappingFunction.apply(key), profileFactory);
         }
     }
 
     final class MapCooldownRepository<K> implements CooldownRepository<K> {
 
         private final Map<K, CooldownProfile> map;
-        private final Clock clock;
 
-        private MapCooldownRepository(
-                final @NonNull Map<K, CooldownProfile> map,
-                final @NonNull Clock clock
-        ) {
+        private MapCooldownRepository(final @NonNull Map<K, CooldownProfile> map) {
             this.map = map;
-            this.clock = clock;
         }
 
         @Override
-        public @NonNull CooldownProfile getProfile(final @NonNull K key) {
-            return this.map.computeIfAbsent(key, k -> CooldownProfile.empty(this.clock));
+        public @NonNull CooldownProfile getProfile(final @NonNull K key, final @NonNull CooldownProfileFactory profileFactory) {
+            return this.map.computeIfAbsent(key, k -> profileFactory.create());
         }
     }
 
     final class CacheCooldownRepository<K> implements CooldownRepository<K> {
 
         private final CloudCache<K, CooldownProfile> cache;
-        private final Clock clock;
 
-        private CacheCooldownRepository(
-                final @NonNull CloudCache<K, CooldownProfile> cache,
-                final @NonNull Clock clock
-        ) {
+        private CacheCooldownRepository(final @NonNull CloudCache<K, CooldownProfile> cache) {
             this.cache = cache;
-            this.clock = clock;
         }
 
         @Override
-        public @NonNull CooldownProfile getProfile(final @NonNull K key) {
+        public @NonNull CooldownProfile getProfile(final @NonNull K key, final @NonNull CooldownProfileFactory profileFactory) {
             CooldownProfile profile = this.cache.getIfPresent(key);
             if (profile == null) {
-                profile = CooldownProfile.empty(this.clock);
+                profile = profileFactory.create();
                 this.cache.put(key, profile);
             }
             return profile;

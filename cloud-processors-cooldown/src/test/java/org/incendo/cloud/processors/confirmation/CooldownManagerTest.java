@@ -72,7 +72,7 @@ class CooldownManagerTest {
         this.commandManager = new TestCommandManager();
         this.cooldownManager = CooldownManager.of(
                 CooldownConfiguration.<TestCommandSender>builder()
-                        .repository(CooldownRepository.forMap(new HashMap<>(), this.clock))
+                        .repository(CooldownRepository.forMap(new HashMap<>()))
                         .cooldownNotifier(this.notifier)
                         .clock(this.clock)
                         .build()

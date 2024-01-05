@@ -21,39 +21,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.cooldown;
+package org.incendo.cloud.processors.cooldown.profile;
 
-import java.time.Clock;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.incendo.cloud.processors.cooldown.CooldownConfiguration;
 
+/**
+ * Standard implementation of {@link CooldownProfileFactory}.
+ *
+ * @since 1.0.0
+ */
 @API(status = API.Status.STABLE, since = "1.0.0")
-public interface CooldownProfile {
+public final class StandardCooldownProfileFactory implements CooldownProfileFactory {
+
+    private final CooldownConfiguration<?> configuration;
 
     /**
-     * Creates an empty profile.
+     * Creates a new factory instance.
      *
-     * @param clock the clock
-     * @return the profile
+     * @param configuration the cooldown configuration
      */
-    static @NonNull CooldownProfile empty(final @NonNull Clock clock) {
-        return new CooldownProfileImpl(clock);
+    public StandardCooldownProfileFactory(final @NonNull CooldownConfiguration<?> configuration) {
+        this.configuration = configuration;
     }
 
-    /**
-     * Returns the cooldown for the given {@code group} if it exists and it's active.
-     *
-     * @param group group that identifies the cooldown
-     * @return the active cooldown, or {@code null}
-     */
-    @Nullable CooldownInstance getCooldown(@NonNull CooldownGroup group);
-
-    /**
-     * Sets the cooldown for the given {@code group}.
-     *
-     * @param group    group that identifies the cooldown
-     * @param cooldown cooldown value
-     */
-    void setCooldown(@NonNull CooldownGroup group, @NonNull CooldownInstance cooldown);
+    @Override
+    public @NonNull CooldownProfile create() {
+        return new CooldownProfileImpl(this.configuration.clock());
+    }
 }

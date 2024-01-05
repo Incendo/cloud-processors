@@ -29,6 +29,8 @@ import java.util.function.Predicate;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.immutables.value.Value;
+import org.incendo.cloud.processors.cooldown.profile.CooldownProfileFactory;
+import org.incendo.cloud.processors.cooldown.profile.StandardCooldownProfileFactory;
 import org.incendo.cloud.processors.immutables.StagedImmutableBuilder;
 
 /**
@@ -86,5 +88,14 @@ public interface CooldownConfiguration<C> {
      */
     default @NonNull Clock clock() {
         return Clock.systemUTC();
+    }
+
+    /**
+     * Returns the factory that produces cooldown profiles.
+     *
+     * @return cooldown profile factory
+     */
+    default @NonNull CooldownProfileFactory profileFactory() {
+        return new StandardCooldownProfileFactory(this);
     }
 }
