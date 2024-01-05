@@ -47,10 +47,11 @@ final class CooldownPostprocessor<C> implements CommandPostprocessor<C> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void accept(final @NonNull CommandPostprocessingContext<C> context) {
-        final Duration cooldownDuration = context.command().commandMeta()
+        final DurationFunction<?> cooldownDurationFunction = context.command().commandMeta()
                 .getOrDefault(CooldownManager.META_COOLDOWN_DURATION, null);
-        if (cooldownDuration == null) {
+        if (cooldownDurationFunction == null) {
             return;
         }
 
@@ -79,7 +80,7 @@ final class CooldownPostprocessor<C> implements CommandPostprocessor<C> {
                 group,
                 Cooldown.builder()
                         .group(group)
-                        .duration(cooldownDuration)
+                        .duration(((DurationFunction<C>) cooldownDurationFunction).getDuration(context.commandContext()))
                         .creationTime(Instant.now(this.confirmationManager.configuration().clock()))
                         .build()
         );

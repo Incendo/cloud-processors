@@ -26,7 +26,7 @@ package org.incendo.cloud.processors.cooldown;
 import cloud.commandframework.Command;
 import cloud.commandframework.execution.postprocessor.CommandPostprocessor;
 import cloud.commandframework.keys.CloudKey;
-import java.time.Duration;
+import io.leangen.geantyref.TypeToken;
 import java.util.Objects;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -43,9 +43,10 @@ public final class CooldownManager<C> {
     /**
      * Meta that adds a cooldown of the given duration to the command.
      */
-    public static final CloudKey<Duration> META_COOLDOWN_DURATION = CloudKey.of(
+    public static final CloudKey<DurationFunction<?>> META_COOLDOWN_DURATION = CloudKey.of(
             "cloud:cooldown_duration",
-            Duration.class
+            new TypeToken<DurationFunction<?>>() {
+            }
     );
     /**
      * Meta that specifies the cooldown group for the command. If the meta value is not present, then

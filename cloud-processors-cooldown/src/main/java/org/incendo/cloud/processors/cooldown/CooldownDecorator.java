@@ -24,7 +24,6 @@
 package org.incendo.cloud.processors.cooldown;
 
 import cloud.commandframework.Command;
-import java.time.Duration;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -47,7 +46,9 @@ public final class CooldownDecorator<C> implements Command.Builder.Applicable<C>
      * @param duration cooldown duration
      * @return the decorator
      */
-    public static <C> @NonNull CooldownDecorator<C> of(final @NonNull Duration duration) {
+    public static <C> @NonNull CooldownDecorator<C> of(
+            final @NonNull DurationFunction<C> duration
+    ) {
         return new CooldownDecorator<>(duration, null /* group */);
     }
 
@@ -59,14 +60,17 @@ public final class CooldownDecorator<C> implements Command.Builder.Applicable<C>
      * @param group    cooldown group
      * @return the decorator
      */
-    public static <C> @NonNull CooldownDecorator<C> of(final @NonNull Duration duration, final @NonNull CooldownGroup group) {
+    public static <C> @NonNull CooldownDecorator<C> of(
+            final @NonNull DurationFunction<C> duration,
+            final @NonNull CooldownGroup group
+    ) {
         return new CooldownDecorator<>(duration, group);
     }
 
-    private final Duration duration;
+    private final DurationFunction<C> duration;
     private final CooldownGroup group;
 
-    private CooldownDecorator(final @NonNull Duration duration, final @Nullable CooldownGroup group) {
+    private CooldownDecorator(final @NonNull DurationFunction<C> duration, final @Nullable CooldownGroup group) {
         this.duration = duration;
         this.group = group;
     }

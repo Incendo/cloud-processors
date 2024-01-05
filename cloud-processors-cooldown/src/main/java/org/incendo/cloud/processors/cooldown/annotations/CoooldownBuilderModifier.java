@@ -31,6 +31,7 @@ import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.processors.cooldown.CooldownDecorator;
 import org.incendo.cloud.processors.cooldown.CooldownGroup;
+import org.incendo.cloud.processors.cooldown.DurationFunction;
 
 /**
  * Builder modifier that will add the cooldown metadata to the command builder.
@@ -69,7 +70,7 @@ public final class CoooldownBuilderModifier<C> implements BuilderModifier<Cooldo
             final @NonNull Cooldown annotation,
             final Command.@NonNull Builder<C> builder
     ) {
-        final Duration duration = Duration.of(annotation.duration(), annotation.timeUnit());
+        final DurationFunction<C> duration = DurationFunction.constant(Duration.of(annotation.duration(), annotation.timeUnit()));
         final CooldownDecorator<C> cooldownDecorator;
         if (annotation.group().isBlank()) {
             cooldownDecorator = CooldownDecorator.of(duration);
