@@ -21,11 +21,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.cooldown;
+package org.incendo.cloud.processors.cooldown.listener;
 
 import cloud.commandframework.Command;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.processors.cooldown.CooldownInstance;
 
 /**
  * Listener that gets invoked when a new cooldown is created.
