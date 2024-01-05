@@ -68,7 +68,7 @@ final class CooldownPostprocessor<C> implements CommandPostprocessor<C> {
         if (cooldown.group() != null) {
             group = Objects.requireNonNull(cooldown.group(), "group");
         } else {
-            group = CooldownGroup.command(context.command());
+            group = this.cooldownManager.configuration().fallbackGroup().apply(context.command());
         }
 
         final CooldownInstance cooldownInstance = profile.getCooldown(group);

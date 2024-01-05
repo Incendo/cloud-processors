@@ -23,7 +23,6 @@
 //
 package org.incendo.cloud.processors.cooldown.annotations;
 
-import cloud.commandframework.Command;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -31,6 +30,7 @@ import java.lang.annotation.Target;
 import java.time.temporal.ChronoUnit;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.processors.cooldown.CooldownConfiguration;
 
 /**
  * Adds a cooldown to the command.
@@ -59,7 +59,7 @@ public @interface Cooldown {
     /**
      * Returns the cooldown group.
      *
-     * <p>If this is empty then {@link org.incendo.cloud.processors.cooldown.CooldownGroup#command(Command)} will be used.</p>
+     * <p>If this is empty then {@link CooldownConfiguration#fallbackGroup()} will be used.</p>
      *
      * @return the cooldown group
      */

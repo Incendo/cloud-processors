@@ -23,9 +23,11 @@
 //
 package org.incendo.cloud.processors.cooldown;
 
+import cloud.commandframework.Command;
 import cloud.commandframework.context.CommandContext;
 import java.time.Clock;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -105,5 +107,15 @@ public interface CooldownConfiguration<C> {
      */
     default @NonNull CooldownProfileFactory profileFactory() {
         return new StandardCooldownProfileFactory(this);
+    }
+
+    /**
+     * Returns the function that determines the fallback {@link CooldownGroup} in case no group has been provided
+     * to the {@link Cooldown}.
+     *
+     * @return the fallback group function
+     */
+    default @NonNull Function<@NonNull Command<C>, @NonNull CooldownGroup> fallbackGroup() {
+        return CooldownGroup::command;
     }
 }

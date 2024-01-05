@@ -42,7 +42,8 @@ import org.incendo.cloud.processors.immutables.StagedImmutableBuilder;
 public interface Cooldown<C> extends Command.Builder.Applicable<C> {
 
     /**
-     * Returns a new cooldown with the given {@code duration} using {@link CooldownGroup#command(Command)} as the group.
+     * Returns a new cooldown with the given {@code duration}
+     * using {@link CooldownConfiguration#fallbackGroup()} as the group.
      *
      * @param <C>      command sender type
      * @param duration the duration
@@ -86,7 +87,7 @@ public interface Cooldown<C> extends Command.Builder.Applicable<C> {
 
     /**
      * Returns the group that this instance belongs to.
-     * If set to {@code null} then {@link CooldownGroup#command(Command)} will be used.
+     * If set to {@code null} then {@link CooldownConfiguration#fallbackGroup()} will be used.
      *
      * @return the cooldown group
      */
