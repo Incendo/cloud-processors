@@ -21,44 +21,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.cooldown.profile;
+package org.incendo.cloud.processors.cooldown;
 
+import cloud.commandframework.Command;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.incendo.cloud.processors.cooldown.CooldownGroup;
-import org.incendo.cloud.processors.cooldown.CooldownInstance;
 
+/**
+ * Listener that gets invoked when a new cooldown is created.
+ *
+ * @param <C> command sender type
+ * @since 1.0.0
+ */
 @API(status = API.Status.STABLE, since = "1.0.0")
-public interface CooldownProfile {
+public interface CooldownCreationListener<C> {
 
     /**
-     * Returns the cooldown for the given {@code group} if it exists and it's active.
+     * Invoked when a new cooldown is created.
      *
-     * @param group group that identifies the cooldown
-     * @return the active cooldown, or {@code null}
+     * @param sender   sender that the cooldown is created for
+     * @param command  command that triggered the cooldown creation
+     * @param instance created instance
      */
-    @Nullable CooldownInstance getCooldown(@NonNull CooldownGroup group);
-
-    /**
-     * Sets the cooldown for the given {@code group}.
-     *
-     * @param group    group that identifies the cooldown
-     * @param cooldown cooldown value
-     */
-    void setCooldown(@NonNull CooldownGroup group, @NonNull CooldownInstance cooldown);
-
-    /**
-     * Deletes the cooldown for the given {@code group}, if it exists.
-     *
-     * @param group the group
-     */
-    void deleteCooldown(@NonNull CooldownGroup group);
-
-    /**
-     * Returns whether the profile is empty.
-     *
-     * @return {@code true} if the profile is empty, else {@code false}
-     */
-    boolean isEmpty();
+    void cooldownCreated(@NonNull C sender, @NonNull Command<C> command, @NonNull CooldownInstance instance);
 }

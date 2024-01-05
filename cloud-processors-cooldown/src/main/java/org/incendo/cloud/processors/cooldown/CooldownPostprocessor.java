@@ -84,10 +84,17 @@ final class CooldownPostprocessor<C> implements CommandPostprocessor<C> {
         }
 
         final CooldownInstance instance = CooldownInstance.builder()
+                .profile(profile)
                 .group(group)
                 .duration(((DurationFunction<C>) cooldown.duration()).getDuration(context.commandContext()))
                 .creationTime(Instant.now(this.cooldownManager.configuration().clock()))
                 .build();
         profile.setCooldown(group, instance);
+
+        this.cooldownManager.configuration().creationListeners().forEach(listener -> listener.cooldownCreated(
+                context.commandContext().sender(),
+                context.command(),
+                instance
+        ));
     }
 }

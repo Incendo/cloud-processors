@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.incendo.cloud.processors.cache.CloudCache;
 import org.incendo.cloud.processors.cooldown.profile.CooldownProfile;
 import org.incendo.cloud.processors.cooldown.profile.CooldownProfileFactory;
@@ -97,6 +98,31 @@ public interface CooldownRepository<K> {
      */
     @NonNull CooldownProfile getProfile(@NonNull K key, @NonNull CooldownProfileFactory profileFactory);
 
+    /**
+     * Returns the profile for the given {@code key}, if it exists.
+     *
+     * @param key key that identifies the profile
+     * @return the profile, or {@code null}
+     */
+    @Nullable CooldownProfile getProfileIfExists(@NonNull K key);
+
+    /**
+     * Deletes the profile identified by the given {@code key}.
+     *
+     * @param key the key
+     */
+    void deleteProfile(@NonNull K key);
+
+    /**
+     * Deletes the cooldown identified by the given {@code key} belonging to the given {@code group}.
+     *
+     * <p>If the profile is empty after the deletion, then the profile is deleted too.</p>
+     *
+     * @param key   key identifying the profile
+     * @param group group to delete
+     */
+    void deleteCooldown(@NonNull K key, @NonNull CooldownGroup group);
+
 
     final class MappingCooldownRepository<C, K> implements CooldownRepository<C> {
 
@@ -113,12 +139,45 @@ public interface CooldownRepository<K> {
         }
 
         @Override
-        public @NonNull CooldownProfile getProfile(final @NonNull C key, final @NonNull CooldownProfileFactory profileFactory) {
+        public @NonNull CooldownProfile getProfile(
+                final @NonNull C key,
+                final @NonNull CooldownProfileFactory profileFactory
+        ) {
             return this.otherRepository.getProfile(this.mappingFunction.apply(key), profileFactory);
+        }
+
+        @Override
+        public @Nullable CooldownProfile getProfileIfExists(final @NonNull C key) {
+            return this.otherRepository.getProfileIfExists(this.mappingFunction.apply(key));
+        }
+
+        @Override
+        public  void deleteProfile(final @NonNull C key) {
+            this.otherRepository.deleteProfile(this.mappingFunction.apply(key));
+        }
+
+        @Override
+        public void deleteCooldown(final @NonNull C key, final @NonNull CooldownGroup group) {
+            this.otherRepository.deleteCooldown(this.mappingFunction.apply(key), group);
         }
     }
 
-    final class MapCooldownRepository<K> implements CooldownRepository<K> {
+    abstract class AbstractCooldownRepository<K> implements CooldownRepository<K> {
+
+        @Override
+        public synchronized void deleteCooldown(final @NonNull K key, final @NonNull CooldownGroup group) {
+            final CooldownProfile profile = this.getProfileIfExists(key);
+            if (profile == null) {
+                return;
+            }
+            profile.deleteCooldown(group);
+            if (profile.isEmpty()) {
+                this.deleteProfile(key);
+            }
+        }
+    }
+
+    final class MapCooldownRepository<K> extends AbstractCooldownRepository<K> {
 
         private final Map<K, CooldownProfile> map;
 
@@ -127,12 +186,25 @@ public interface CooldownRepository<K> {
         }
 
         @Override
-        public @NonNull CooldownProfile getProfile(final @NonNull K key, final @NonNull CooldownProfileFactory profileFactory) {
+        public synchronized @NonNull CooldownProfile getProfile(
+                final @NonNull K key,
+                final @NonNull CooldownProfileFactory profileFactory
+        ) {
             return this.map.computeIfAbsent(key, k -> profileFactory.create());
+        }
+
+        @Override
+        public synchronized @Nullable CooldownProfile getProfileIfExists(final @NonNull K key) {
+            return this.map.get(key);
+        }
+
+        @Override
+        public synchronized void deleteProfile(final @NonNull K key) {
+            this.map.remove(key);
         }
     }
 
-    final class CacheCooldownRepository<K> implements CooldownRepository<K> {
+    final class CacheCooldownRepository<K> extends AbstractCooldownRepository<K> {
 
         private final CloudCache<K, CooldownProfile> cache;
 
@@ -141,13 +213,26 @@ public interface CooldownRepository<K> {
         }
 
         @Override
-        public @NonNull CooldownProfile getProfile(final @NonNull K key, final @NonNull CooldownProfileFactory profileFactory) {
+        public synchronized @NonNull CooldownProfile getProfile(
+                final @NonNull K key,
+                final @NonNull CooldownProfileFactory profileFactory
+        ) {
             CooldownProfile profile = this.cache.getIfPresent(key);
             if (profile == null) {
                 profile = profileFactory.create();
                 this.cache.put(key, profile);
             }
             return profile;
+        }
+
+        @Override
+        public synchronized @Nullable CooldownProfile getProfileIfExists(final @NonNull K key) {
+            return this.cache.getIfPresent(key);
+        }
+
+        @Override
+        public synchronized void deleteProfile(final @NonNull K key) {
+            this.cache.delete(key);
         }
     }
 }

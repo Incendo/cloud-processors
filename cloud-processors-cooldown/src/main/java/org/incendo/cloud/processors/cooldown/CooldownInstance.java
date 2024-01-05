@@ -28,6 +28,7 @@ import java.time.Instant;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.immutables.value.Value;
+import org.incendo.cloud.processors.cooldown.profile.CooldownProfile;
 import org.incendo.cloud.processors.immutables.StagedImmutableBuilder;
 
 /**
@@ -45,9 +46,16 @@ public interface CooldownInstance {
      *
      * @return the builder
      */
-    static ImmutableCooldownInstance.@NonNull GroupBuildStage builder() {
+    static ImmutableCooldownInstance.@NonNull ProfileBuildStage builder() {
         return ImmutableCooldownInstance.builder();
     }
+
+    /**
+     * Returns the profile that owns the cooldown.
+     *
+     * @return the owning profile
+     */
+    @NonNull CooldownProfile profile();
 
     /**
      * Returns the cooldown group.

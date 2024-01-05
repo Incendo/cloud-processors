@@ -25,6 +25,7 @@ package org.incendo.cloud.processors.cooldown;
 
 import cloud.commandframework.context.CommandContext;
 import java.time.Clock;
+import java.util.List;
 import java.util.function.Predicate;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -68,6 +69,13 @@ public interface CooldownConfiguration<C> {
      * @return notifier for active cooldowns
      */
     @NonNull CooldownNotifier<C> cooldownNotifier();
+
+    /**
+     * Returns the creation listeners.
+     *
+     * @return creation listeners
+     */
+    @NonNull List<CooldownCreationListener<C>> creationListeners();
 
     /**
      * Returns a predicate that determines whether the {@link CommandContext}

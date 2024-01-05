@@ -8,3 +8,9 @@ dependencies {
 
     compileOnly(libs.cloud.annotations)
 }
+
+// TODO(City): Disable this
+// we're getting errors on generated files due to -Werror :(
+tasks.withType<JavaCompile> {
+    options.compilerArgs.remove("-Werror")
+}

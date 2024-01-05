@@ -34,17 +34,21 @@ import org.incendo.cloud.processors.confirmation.util.TestCommandManager;
 import org.incendo.cloud.processors.confirmation.util.TestCommandSender;
 import org.incendo.cloud.processors.cooldown.Cooldown;
 import org.incendo.cloud.processors.cooldown.CooldownConfiguration;
+import org.incendo.cloud.processors.cooldown.CooldownCreationListener;
 import org.incendo.cloud.processors.cooldown.CooldownGroup;
+import org.incendo.cloud.processors.cooldown.CooldownInstance;
 import org.incendo.cloud.processors.cooldown.CooldownManager;
 import org.incendo.cloud.processors.cooldown.CooldownNotifier;
 import org.incendo.cloud.processors.cooldown.CooldownRepository;
 import org.incendo.cloud.processors.cooldown.DurationFunction;
+import org.incendo.cloud.processors.cooldown.profile.CooldownProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
@@ -63,6 +67,8 @@ class CooldownManagerTest {
     private CommandExecutionHandler<TestCommandSender> commandExecutionHandler;
     @Mock
     private Clock clock;
+    @Mock
+    private CooldownCreationListener<TestCommandSender> listener;
 
     private CommandManager<TestCommandSender> commandManager;
     private CooldownManager<TestCommandSender> cooldownManager;
@@ -75,6 +81,7 @@ class CooldownManagerTest {
                         .repository(CooldownRepository.forMap(new HashMap<>()))
                         .cooldownNotifier(this.notifier)
                         .clock(this.clock)
+                        .addCreationListeners(this.listener)
                         .build()
         );
         this.commandManager.registerCommandPostProcessor(this.cooldownManager.createPostprocessor());
@@ -100,6 +107,7 @@ class CooldownManagerTest {
         // Assert
         verify(this.commandExecutionHandler).executeFuture(any());
         verify(this.notifier).notify(eq(this.commandSender), any(), any());
+        verify(this.listener).cooldownCreated(eq(this.commandSender), any(), any());
     }
 
     @Test
@@ -122,10 +130,12 @@ class CooldownManagerTest {
         // Assert
         verify(this.commandExecutionHandler, times(2)).executeFuture(any());
         verify(this.notifier, never()).notify(eq(this.commandSender), any(), any());
+        verify(this.listener, times(2)).cooldownCreated(eq(this.commandSender), any(), any());
     }
 
     @Test
     void testCooldownGroupsDifferentGroups() {
+        // Arrange
         final Cooldown<TestCommandSender> decorator1 = Cooldown.of(
                 DurationFunction.constant(Duration.ofHours(1L)),
                 CooldownGroup.named("foo")
@@ -155,10 +165,12 @@ class CooldownManagerTest {
         // Assert
         verify(this.commandExecutionHandler, times(2)).executeFuture(any());
         verify(this.notifier, never()).notify(eq(this.commandSender), any(), any());
+        verify(this.listener, times(2)).cooldownCreated(eq(this.commandSender), any(), any());
     }
 
     @Test
     void testCooldownGroupsSameGroup() {
+        // Arrange
         final Cooldown<TestCommandSender> decorator = Cooldown.of(
                 DurationFunction.constant(Duration.ofHours(1L)),
                 CooldownGroup.named("foo")
@@ -184,5 +196,28 @@ class CooldownManagerTest {
         // Assert
         verify(this.commandExecutionHandler, times(1)).executeFuture(any());
         verify(this.notifier).notify(eq(this.commandSender), any(), any());
+        verify(this.listener).cooldownCreated(eq(this.commandSender), any(), any());
+    }
+
+    @Test
+    void testCooldownDeletion() {
+        // Arrange
+        final CooldownGroup group = CooldownGroup.named("foo");
+        final CooldownProfile profile = this.cooldownManager.repository()
+                .getProfile(this.commandSender, this.cooldownManager.configuration().profileFactory());
+        final CooldownInstance cooldown = CooldownInstance.builder()
+                .profile(profile)
+                .group(group)
+                .duration(Duration.ofHours(1L))
+                .creationTime(Instant.now())
+                .build();
+        profile.setCooldown(cooldown.group(), cooldown);
+
+        // Act
+        this.cooldownManager.repository().deleteCooldown(this.commandSender, group);
+
+        // Assert
+        assertThat(profile.isEmpty()).isTrue();
+        assertThat(this.cooldownManager.repository().getProfileIfExists(this.commandSender)).isNull();
     }
 }

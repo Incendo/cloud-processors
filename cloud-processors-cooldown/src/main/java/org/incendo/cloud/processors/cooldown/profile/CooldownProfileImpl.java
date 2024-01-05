@@ -43,7 +43,7 @@ final class CooldownProfileImpl implements CooldownProfile {
     }
 
     @Override
-    public synchronized @Nullable CooldownInstance getCooldown(@NonNull final CooldownGroup group) {
+    public synchronized @Nullable CooldownInstance getCooldown(final @NonNull CooldownGroup group) {
         final CooldownInstance cooldown = this.cooldowns.get(group);
         if (cooldown == null) {
             return null;
@@ -58,7 +58,17 @@ final class CooldownProfileImpl implements CooldownProfile {
     }
 
     @Override
-    public synchronized void setCooldown(@NonNull final CooldownGroup group, @NonNull final CooldownInstance cooldown) {
+    public synchronized void setCooldown(final @NonNull CooldownGroup group, final @NonNull CooldownInstance cooldown) {
         this.cooldowns.put(group, cooldown);
+    }
+
+    @Override
+    public synchronized void deleteCooldown(final @NonNull CooldownGroup group) {
+        this.cooldowns.remove(group);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.cooldowns.isEmpty();
     }
 }
