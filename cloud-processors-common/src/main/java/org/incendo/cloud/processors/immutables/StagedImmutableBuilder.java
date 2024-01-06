@@ -46,7 +46,9 @@ import org.immutables.value.Value;
         defaultAsDefault = true,
         put = "*",
         putAll = "*",
-        stagedBuilder = true
+        stagedBuilder = true,
+        depluralize = true,
+        depluralizeDictionary = "creationListeners:creationListener"
 )
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.PACKAGE})
 @Retention(RetentionPolicy.SOURCE)

@@ -48,7 +48,7 @@ ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExe
 CooldownConfiguration configuration = CooldownConfiguration.<YourSenderType>builder()
         // ...
         .repository(repository)
-        .addCreationListeners(new ScheduledCleanupCreationListener(executorService, repository))
+        .addCreationListener(new ScheduledCleanupCreationListener(executorService, repository))
         .build();
 ```
 
