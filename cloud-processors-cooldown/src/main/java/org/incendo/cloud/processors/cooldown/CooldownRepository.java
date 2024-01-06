@@ -39,6 +39,9 @@ import org.incendo.cloud.processors.cooldown.profile.CooldownProfileFactory;
  * <p>If the command sender objects are temporary (such as game entities, etc) the keys map be mapped to a persistent
  * identifier by using a {@link #mapping(Function, CooldownRepository)} repository.</p>
  *
+ * <p>The {@link CooldownProfile} creation may be customized by passing a custom {@link CooldownProfileFactory}
+ * to {@link CooldownConfiguration#profileFactory()}.</p>
+ *
  * @param <K> type of the keys that identifies the profiles
  * @since 1.0.0
  */

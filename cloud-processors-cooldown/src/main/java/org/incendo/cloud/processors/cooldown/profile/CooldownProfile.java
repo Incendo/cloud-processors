@@ -29,6 +29,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.incendo.cloud.processors.cooldown.CooldownGroup;
 import org.incendo.cloud.processors.cooldown.CooldownInstance;
 
+/**
+ * Profile that stores {@link CooldownInstance cooldowns} identified by {@link CooldownGroup groups}.
+ *
+ * @since 1.0.0
+ */
 @API(status = API.Status.STABLE, since = "1.0.0")
 public interface CooldownProfile {
 
