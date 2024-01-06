@@ -17,11 +17,13 @@ but an example would be:
 ```java
 CooldownConfiguration configuration = CooldownConfiguration.<YourSenderType>builder()
         .repository(CooldownRepository.forMap(new HashMap<>()))
+        .addActiveCooldownListener(...)
+        .addCooldownCreationListener(...)
         .cooldownNotifier(notifier)
         .build();
 ```
-The notifier is an interface that is invoked when a sender is prevented from using a command due to an
-active cooldown.
+The listeners are invoked when different events take place. The active cooldown listener in particular may be used to
+inform the command sender that their command execution got blocked due to an active cooldown.
 
 The repository stores active cooldowns for a command sender in the form of cooldown profiles.
 The cooldowns are grouped by their `CooldownGroup`, by default a unique group will be created per command.

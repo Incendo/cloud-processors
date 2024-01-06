@@ -21,11 +21,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.cooldown;
+package org.incendo.cloud.processors.cooldown.listener;
 
+import cloud.commandframework.Command;
 import java.time.Duration;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.processors.cooldown.CooldownInstance;
 
 /**
  * Notifies command senders that they have an active cooldown.
@@ -34,24 +36,20 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * @since 1.0.0
  */
 @API(status = API.Status.STABLE, since = "1.0.0")
-public interface CooldownNotifier<C> {
+public interface CooldownActiveListener<C> {
 
     /**
-     * Returns a notifier that does nothing.
-     *
-     * @param <C> command sender type
-     * @return the notifier
-     */
-    static <C> @NonNull CooldownNotifier<C> noOp() {
-        return (sender, cooldown, remainingTime) -> {};
-    }
-
-    /**
-     * Notifies the given {@code sender} that they have an active cooldown preventing them from using the command.
+     * Invoked when a cooldown is preventing the {@code sender} from executing a command.
      *
      * @param sender        command sender to notify
+     * @param command       command that could not be executed
      * @param cooldown      cooldown instance
      * @param remainingTime remaining time
      */
-    void notify(@NonNull C sender, @NonNull CooldownInstance cooldown, @NonNull Duration remainingTime);
+    void cooldownActive(
+            @NonNull C sender,
+            @NonNull Command<C> command,
+            @NonNull CooldownInstance cooldown,
+            @NonNull Duration remainingTime
+    );
 }

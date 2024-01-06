@@ -74,11 +74,13 @@ final class CooldownPostprocessor<C> implements CommandPostprocessor<C> {
         final CooldownInstance cooldownInstance = profile.getCooldown(group);
         if (cooldownInstance != null) {
             final Instant endTime = cooldownInstance.creationTime().plus(cooldownInstance.duration());
-            this.cooldownManager.configuration().cooldownNotifier().notify(
+            final Duration remainingTime = Duration.between(Instant.now(this.cooldownManager.configuration().clock()), endTime);
+            this.cooldownManager.configuration().activeCooldownListeners().forEach(listener -> listener.cooldownActive(
                     context.commandContext().sender(),
+                    context.command(),
                     cooldownInstance,
-                    Duration.between(Instant.now(this.cooldownManager.configuration().clock()), endTime)
-            );
+                    remainingTime
+            ));
             ConsumerService.interrupt();
             return;
         }

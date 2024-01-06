@@ -37,9 +37,9 @@ import org.incendo.cloud.processors.cooldown.CooldownConfiguration;
 import org.incendo.cloud.processors.cooldown.CooldownGroup;
 import org.incendo.cloud.processors.cooldown.CooldownInstance;
 import org.incendo.cloud.processors.cooldown.CooldownManager;
-import org.incendo.cloud.processors.cooldown.CooldownNotifier;
 import org.incendo.cloud.processors.cooldown.CooldownRepository;
 import org.incendo.cloud.processors.cooldown.DurationFunction;
+import org.incendo.cloud.processors.cooldown.listener.CooldownActiveListener;
 import org.incendo.cloud.processors.cooldown.listener.CooldownCreationListener;
 import org.incendo.cloud.processors.cooldown.profile.CooldownProfile;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,7 +62,7 @@ class CooldownManagerTest {
     @Mock
     private TestCommandSender commandSender;
     @Mock
-    private CooldownNotifier<TestCommandSender> notifier;
+    private CooldownActiveListener<TestCommandSender> notifier;
     @Mock(strictness = Mock.Strictness.LENIENT)
     private CommandExecutionHandler<TestCommandSender> commandExecutionHandler;
     @Mock
@@ -79,9 +79,9 @@ class CooldownManagerTest {
         this.cooldownManager = CooldownManager.of(
                 CooldownConfiguration.<TestCommandSender>builder()
                         .repository(CooldownRepository.forMap(new HashMap<>()))
-                        .cooldownNotifier(this.notifier)
+                        .addActiveCooldownListener(this.notifier)
                         .clock(this.clock)
-                        .addCreationListeners(this.listener)
+                        .addCreationListener(this.listener)
                         .build()
         );
         this.commandManager.registerCommandPostProcessor(this.cooldownManager.createPostprocessor());
@@ -106,7 +106,7 @@ class CooldownManagerTest {
 
         // Assert
         verify(this.commandExecutionHandler).executeFuture(any());
-        verify(this.notifier).notify(eq(this.commandSender), any(), any());
+        verify(this.notifier).cooldownActive(eq(this.commandSender), any(), any(), any());
         verify(this.listener).cooldownCreated(eq(this.commandSender), any(), any());
     }
 
@@ -129,7 +129,7 @@ class CooldownManagerTest {
 
         // Assert
         verify(this.commandExecutionHandler, times(2)).executeFuture(any());
-        verify(this.notifier, never()).notify(eq(this.commandSender), any(), any());
+        verify(this.notifier, never()).cooldownActive(eq(this.commandSender), any(), any(), any());
         verify(this.listener, times(2)).cooldownCreated(eq(this.commandSender), any(), any());
     }
 
@@ -164,7 +164,7 @@ class CooldownManagerTest {
 
         // Assert
         verify(this.commandExecutionHandler, times(2)).executeFuture(any());
-        verify(this.notifier, never()).notify(eq(this.commandSender), any(), any());
+        verify(this.notifier, never()).cooldownActive(eq(this.commandSender), any(), any(), any());
         verify(this.listener, times(2)).cooldownCreated(eq(this.commandSender), any(), any());
     }
 
@@ -195,7 +195,7 @@ class CooldownManagerTest {
 
         // Assert
         verify(this.commandExecutionHandler, times(1)).executeFuture(any());
-        verify(this.notifier).notify(eq(this.commandSender), any(), any());
+        verify(this.notifier).cooldownActive(eq(this.commandSender), any(), any(), any());
         verify(this.listener).cooldownCreated(eq(this.commandSender), any(), any());
     }
 

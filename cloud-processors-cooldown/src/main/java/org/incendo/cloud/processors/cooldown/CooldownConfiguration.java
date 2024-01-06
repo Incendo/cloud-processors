@@ -32,6 +32,7 @@ import java.util.function.Predicate;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.immutables.value.Value;
+import org.incendo.cloud.processors.cooldown.listener.CooldownActiveListener;
 import org.incendo.cloud.processors.cooldown.listener.CooldownCreationListener;
 import org.incendo.cloud.processors.cooldown.profile.CooldownProfileFactory;
 import org.incendo.cloud.processors.cooldown.profile.StandardCooldownProfileFactory;
@@ -66,15 +67,18 @@ public interface CooldownConfiguration<C> {
     @NonNull CooldownRepository<C> repository();
 
     /**
-     * Returns a consumer that gets invoked when a cooldown is active and is preventing the command
-     * from executing.
+     * Returns the active cooldown listeners.
      *
-     * @return notifier for active cooldowns
+     * <p>The active cooldown listeners are invoked when a cooldown is preventing a sender from executing a command.</p>
+     *
+     * @return active cooldown listeners
      */
-    @NonNull CooldownNotifier<C> cooldownNotifier();
+    @NonNull List<CooldownActiveListener<C>> activeCooldownListeners();
 
     /**
      * Returns the creation listeners.
+     *
+     * <p>The creation listeners are invoked when a new cooldown is created.</p>
      *
      * @return creation listeners
      */
