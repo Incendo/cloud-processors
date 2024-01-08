@@ -31,3 +31,4 @@ rootProject.name = "cloud-processors-parent"
 include(":cloud-processors-common")
 include(":cloud-processors-confirmation")
 include(":cloud-processors-cooldown")
+include(":cloud-processors-requirements")
