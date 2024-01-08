@@ -21,38 +21,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.immutables;
+package org.incendo.cloud.processors.cooldown.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.time.temporal.ChronoUnit;
 import org.apiguardian.api.API;
-import org.immutables.value.Value;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.processors.cooldown.CooldownConfiguration;
 
 /**
- * Annotation that generates immutables classes with staged builders.
+ * Adds a cooldown to the command.
+ *
+ * @since 1.0.0
  */
-@Value.Style(
-        typeImmutableEnclosing = "*",
-        typeAbstract = "*",
-        deferCollectionAllocation = true,
-        optionalAcceptNullable = true,
-        jdkOnly = true, // We do not want any runtime dependencies!
-        allParameters = true,
-        headerComments = true,
-        jacksonIntegration = false,
-        builderVisibility = Value.Style.BuilderVisibility.SAME,
-        defaultAsDefault = true,
-        put = "*",
-        putAll = "*",
-        stagedBuilder = true,
-        depluralize = true,
-        depluralizeDictionary = "creationListeners:creationListener"
-)
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PACKAGE})
-@Retention(RetentionPolicy.SOURCE)
-@API(status = API.Status.INTERNAL, since = "1.0.0")
-public @interface StagedImmutableBuilder {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@API(status = API.Status.STABLE, since = "1.0.0")
+public @interface Cooldown {
 
+    /**
+     * Returns the duration.
+     *
+     * @return the duration
+     */
+    long duration();
+
+    /**
+     * Returns the time unit of the {@link #duration()}}.
+     *
+     * @return the time unit
+     */
+    @NonNull ChronoUnit timeUnit();
+
+    /**
+     * Returns the cooldown group.
+     *
+     * <p>If this is empty then {@link CooldownConfiguration#fallbackGroup()} will be used.</p>
+     *
+     * @return the cooldown group
+     */
+    String group() default "";
 }

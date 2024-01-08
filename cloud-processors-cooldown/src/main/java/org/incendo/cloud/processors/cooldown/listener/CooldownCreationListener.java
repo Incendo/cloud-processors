@@ -21,38 +21,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.immutables;
+package org.incendo.cloud.processors.cooldown.listener;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import cloud.commandframework.Command;
 import org.apiguardian.api.API;
-import org.immutables.value.Value;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.processors.cooldown.CooldownInstance;
 
 /**
- * Annotation that generates immutables classes with staged builders.
+ * Listener that gets invoked when a new cooldown is created.
+ *
+ * @param <C> command sender type
+ * @since 1.0.0
  */
-@Value.Style(
-        typeImmutableEnclosing = "*",
-        typeAbstract = "*",
-        deferCollectionAllocation = true,
-        optionalAcceptNullable = true,
-        jdkOnly = true, // We do not want any runtime dependencies!
-        allParameters = true,
-        headerComments = true,
-        jacksonIntegration = false,
-        builderVisibility = Value.Style.BuilderVisibility.SAME,
-        defaultAsDefault = true,
-        put = "*",
-        putAll = "*",
-        stagedBuilder = true,
-        depluralize = true,
-        depluralizeDictionary = "creationListeners:creationListener"
-)
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PACKAGE})
-@Retention(RetentionPolicy.SOURCE)
-@API(status = API.Status.INTERNAL, since = "1.0.0")
-public @interface StagedImmutableBuilder {
+@API(status = API.Status.STABLE, since = "1.0.0")
+public interface CooldownCreationListener<C> {
 
+    /**
+     * Invoked when a new cooldown is created.
+     *
+     * @param sender   sender that the cooldown is created for
+     * @param command  command that triggered the cooldown creation
+     * @param instance created instance
+     */
+    void cooldownCreated(@NonNull C sender, @NonNull Command<C> command, @NonNull CooldownInstance instance);
 }

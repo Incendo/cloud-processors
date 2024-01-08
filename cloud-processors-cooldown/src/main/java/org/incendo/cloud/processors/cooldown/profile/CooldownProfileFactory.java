@@ -21,38 +21,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.immutables;
+package org.incendo.cloud.processors.cooldown.profile;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import org.apiguardian.api.API;
-import org.immutables.value.Value;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Annotation that generates immutables classes with staged builders.
+ * Factory that creates cooldown profiles.
+ *
+ * @since 1.0.0
  */
-@Value.Style(
-        typeImmutableEnclosing = "*",
-        typeAbstract = "*",
-        deferCollectionAllocation = true,
-        optionalAcceptNullable = true,
-        jdkOnly = true, // We do not want any runtime dependencies!
-        allParameters = true,
-        headerComments = true,
-        jacksonIntegration = false,
-        builderVisibility = Value.Style.BuilderVisibility.SAME,
-        defaultAsDefault = true,
-        put = "*",
-        putAll = "*",
-        stagedBuilder = true,
-        depluralize = true,
-        depluralizeDictionary = "creationListeners:creationListener"
-)
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PACKAGE})
-@Retention(RetentionPolicy.SOURCE)
-@API(status = API.Status.INTERNAL, since = "1.0.0")
-public @interface StagedImmutableBuilder {
+@API(status = API.Status.STABLE, since = "1.0.0")
+public interface CooldownProfileFactory{
 
+    /**
+     * Creates a new cooldown profile.
+     *
+     * @return the created profile
+     */
+    @NonNull CooldownProfile create();
 }

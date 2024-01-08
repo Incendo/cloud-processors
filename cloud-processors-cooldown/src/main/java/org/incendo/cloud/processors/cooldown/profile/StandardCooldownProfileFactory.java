@@ -21,38 +21,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.immutables;
+package org.incendo.cloud.processors.cooldown.profile;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import org.apiguardian.api.API;
-import org.immutables.value.Value;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.processors.cooldown.CooldownConfiguration;
 
 /**
- * Annotation that generates immutables classes with staged builders.
+ * Standard implementation of {@link CooldownProfileFactory}.
+ *
+ * @since 1.0.0
  */
-@Value.Style(
-        typeImmutableEnclosing = "*",
-        typeAbstract = "*",
-        deferCollectionAllocation = true,
-        optionalAcceptNullable = true,
-        jdkOnly = true, // We do not want any runtime dependencies!
-        allParameters = true,
-        headerComments = true,
-        jacksonIntegration = false,
-        builderVisibility = Value.Style.BuilderVisibility.SAME,
-        defaultAsDefault = true,
-        put = "*",
-        putAll = "*",
-        stagedBuilder = true,
-        depluralize = true,
-        depluralizeDictionary = "creationListeners:creationListener"
-)
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PACKAGE})
-@Retention(RetentionPolicy.SOURCE)
-@API(status = API.Status.INTERNAL, since = "1.0.0")
-public @interface StagedImmutableBuilder {
+@API(status = API.Status.STABLE, since = "1.0.0")
+public final class StandardCooldownProfileFactory implements CooldownProfileFactory {
 
+    private final CooldownConfiguration<?> configuration;
+
+    /**
+     * Creates a new factory instance.
+     *
+     * @param configuration the cooldown configuration
+     */
+    public StandardCooldownProfileFactory(final @NonNull CooldownConfiguration<?> configuration) {
+        this.configuration = configuration;
+    }
+
+    @Override
+    public @NonNull CooldownProfile create() {
+        return new CooldownProfileImpl(this.configuration.clock());
+    }
 }

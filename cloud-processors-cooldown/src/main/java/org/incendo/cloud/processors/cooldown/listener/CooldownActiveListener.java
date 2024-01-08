@@ -21,38 +21,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.immutables;
+package org.incendo.cloud.processors.cooldown.listener;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import cloud.commandframework.Command;
+import java.time.Duration;
 import org.apiguardian.api.API;
-import org.immutables.value.Value;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.processors.cooldown.CooldownInstance;
 
 /**
- * Annotation that generates immutables classes with staged builders.
+ * Notifies command senders that they have an active cooldown.
+ *
+ * @param <C> command sender type
+ * @since 1.0.0
  */
-@Value.Style(
-        typeImmutableEnclosing = "*",
-        typeAbstract = "*",
-        deferCollectionAllocation = true,
-        optionalAcceptNullable = true,
-        jdkOnly = true, // We do not want any runtime dependencies!
-        allParameters = true,
-        headerComments = true,
-        jacksonIntegration = false,
-        builderVisibility = Value.Style.BuilderVisibility.SAME,
-        defaultAsDefault = true,
-        put = "*",
-        putAll = "*",
-        stagedBuilder = true,
-        depluralize = true,
-        depluralizeDictionary = "creationListeners:creationListener"
-)
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PACKAGE})
-@Retention(RetentionPolicy.SOURCE)
-@API(status = API.Status.INTERNAL, since = "1.0.0")
-public @interface StagedImmutableBuilder {
+@API(status = API.Status.STABLE, since = "1.0.0")
+public interface CooldownActiveListener<C> {
 
+    /**
+     * Invoked when a cooldown is preventing the {@code sender} from executing a command.
+     *
+     * @param sender        command sender to notify
+     * @param command       command that could not be executed
+     * @param cooldown      cooldown instance
+     * @param remainingTime remaining time
+     */
+    void cooldownActive(
+            @NonNull C sender,
+            @NonNull Command<C> command,
+            @NonNull CooldownInstance cooldown,
+            @NonNull Duration remainingTime
+    );
 }

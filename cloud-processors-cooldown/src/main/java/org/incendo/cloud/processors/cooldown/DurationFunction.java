@@ -21,38 +21,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.immutables;
+package org.incendo.cloud.processors.cooldown;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import cloud.commandframework.context.CommandContext;
+import java.time.Duration;
 import org.apiguardian.api.API;
-import org.immutables.value.Value;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Annotation that generates immutables classes with staged builders.
+ * A function that generates a duration from a command context.
+ *
+ * @param <C> command sender type
+ * @since 1.0.0
  */
-@Value.Style(
-        typeImmutableEnclosing = "*",
-        typeAbstract = "*",
-        deferCollectionAllocation = true,
-        optionalAcceptNullable = true,
-        jdkOnly = true, // We do not want any runtime dependencies!
-        allParameters = true,
-        headerComments = true,
-        jacksonIntegration = false,
-        builderVisibility = Value.Style.BuilderVisibility.SAME,
-        defaultAsDefault = true,
-        put = "*",
-        putAll = "*",
-        stagedBuilder = true,
-        depluralize = true,
-        depluralizeDictionary = "creationListeners:creationListener"
-)
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PACKAGE})
-@Retention(RetentionPolicy.SOURCE)
-@API(status = API.Status.INTERNAL, since = "1.0.0")
-public @interface StagedImmutableBuilder {
+@FunctionalInterface
+@API(status = API.Status.STABLE, since = "1.0.0")
+public interface DurationFunction<C> {
 
+    /**
+     * Creates a new duration function that always returns {@code duration}.
+     *
+     * @param <C>      command sender type
+     * @param duration constant duration
+     * @return the duration function
+     */
+    static <C> @NonNull DurationFunction<C> constant(final @NonNull Duration duration) {
+        return context -> duration;
+    }
+
+    /**
+     * Returns the duration for the given {@code context}.
+     *
+     * @param context the context to get the duration for
+     * @return the duration
+     */
+    @NonNull Duration getDuration(@NonNull CommandContext<C> context);
 }
