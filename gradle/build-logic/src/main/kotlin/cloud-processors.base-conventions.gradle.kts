@@ -5,9 +5,9 @@ plugins {
 
 indra {
     javaVersions {
-        minimumToolchain(11)
-        target(11)
-        testWith().set(setOf(11, 17))
+        minimumToolchain(17)
+        target(17)
+        testWith().set(setOf(17))
     }
     checkstyle().set(libs.versions.checkstyle)
 }
