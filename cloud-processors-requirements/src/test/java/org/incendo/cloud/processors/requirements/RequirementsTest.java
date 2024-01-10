@@ -25,8 +25,8 @@ package org.incendo.cloud.processors.requirements;
 
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.processors.requirements.util.TestRequirement;
 import org.incendo.cloud.processors.requirements.util.TestCommandSender;
+import org.incendo.cloud.processors.requirements.util.TestRequirement;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;

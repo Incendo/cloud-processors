@@ -28,10 +28,9 @@ import cloud.commandframework.execution.CommandExecutionHandler;
 import cloud.commandframework.keys.CloudKey;
 import io.leangen.geantyref.TypeToken;
 import java.util.concurrent.CompletableFuture;
-
-import org.incendo.cloud.processors.requirements.util.TestRequirement;
 import org.incendo.cloud.processors.requirements.util.TestCommandManager;
 import org.incendo.cloud.processors.requirements.util.TestCommandSender;
+import org.incendo.cloud.processors.requirements.util.TestRequirement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

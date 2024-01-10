@@ -30,9 +30,9 @@ import java.util.function.Function;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.common.returnsreceiver.qual.This;
+import org.incendo.cloud.processors.requirements.Requirement;
 import org.incendo.cloud.processors.requirements.RequirementPostprocessor;
 import org.incendo.cloud.processors.requirements.Requirements;
-import org.incendo.cloud.processors.requirements.Requirement;
 
 /**
  * Utility for binding annotations to {@link Requirement requirements}.
