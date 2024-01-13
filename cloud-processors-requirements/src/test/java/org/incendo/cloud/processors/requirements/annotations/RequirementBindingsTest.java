@@ -23,10 +23,9 @@
 //
 package org.incendo.cloud.processors.requirements.annotations;
 
-import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.annotations.AnnotationParser;
-import cloud.commandframework.annotations.CommandMethod;
+import cloud.commandframework.annotations.Command;
 import cloud.commandframework.execution.CommandExecutionHandler;
 import cloud.commandframework.keys.CloudKey;
 import io.leangen.geantyref.TypeToken;
@@ -83,7 +82,7 @@ class RequirementBindingsTest {
         );
 
         // Act
-        final Command<TestCommandSender> command =
+        final cloud.commandframework.Command<TestCommandSender> command =
                 this.annotationParser.parse(new TestClass()).stream().findFirst().orElseThrow();
 
         // Assert
@@ -99,7 +98,7 @@ class RequirementBindingsTest {
     public static final class TestClass {
 
         @HasName
-        @CommandMethod("command")
+        @Command("command")
         public void command() {
         }
     }

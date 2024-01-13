@@ -110,7 +110,7 @@ RequirementBindings.create(this.annotationParser, REQUIREMENT_KEY).register(
 
 // Then annotate a method with it:
 @YourAnnotation
-@CommandMethod("command")
+@Command("command")
 public void commandMethod() {
     // ...
 }
