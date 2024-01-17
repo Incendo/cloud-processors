@@ -27,6 +27,7 @@ import cloud.commandframework.execution.postprocessor.CommandPostprocessingConte
 import cloud.commandframework.execution.postprocessor.CommandPostprocessor;
 import cloud.commandframework.services.types.ConsumerService;
 import java.time.Instant;
+import java.util.Objects;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -42,7 +43,7 @@ final class ConfirmationPostprocessor<C> implements CommandPostprocessor<C> {
     private final ConfirmationManager<C> confirmationManager;
 
     ConfirmationPostprocessor(final @NonNull ConfirmationManager<C> confirmationManager) {
-        this.confirmationManager = confirmationManager;
+        this.confirmationManager = Objects.requireNonNull(confirmationManager, "confirmationManager");
     }
 
     @Override

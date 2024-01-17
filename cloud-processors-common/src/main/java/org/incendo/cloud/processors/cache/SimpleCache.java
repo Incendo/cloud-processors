@@ -24,6 +24,7 @@
 package org.incendo.cloud.processors.cache;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.WeakHashMap;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -58,21 +59,26 @@ public final class SimpleCache<K, V> implements CloudCache<K, V> {
 
     @Override
     public void delete(final @NonNull K key) {
+        Objects.requireNonNull(key, "key");
         this.map.remove(key);
     }
 
     @Override
     public void put(final @NonNull K key, final @NonNull V value) {
+        Objects.requireNonNull(key, "key");
+        Objects.requireNonNull(value, "value");
         this.map.put(key, value);
     }
 
     @Override
     public @Nullable V getIfPresent(final @NonNull K key) {
+        Objects.requireNonNull(key, "key");
         return this.map.get(key);
     }
 
     @Override
     public @Nullable V popIfPresent(final @NonNull K key) {
+        Objects.requireNonNull(key, "key");
         return this.map.remove(key);
     }
 }

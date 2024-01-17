@@ -59,16 +59,20 @@ public final class GuavaCache<K, V> implements CloudCache<K, V> {
 
     @Override
     public void delete(final @NonNull K key) {
+        Objects.requireNonNull(key, "key");
         this.cache.invalidate(key);
     }
 
     @Override
     public void put(final @NonNull K key, final @NonNull V value) {
+        Objects.requireNonNull(key, "key");
+        Objects.requireNonNull(value, "value");
         this.cache.put(key, value);
     }
 
     @Override
     public @Nullable V getIfPresent(final @NonNull K key) {
+        Objects.requireNonNull(key, "key");
         return this.cache.getIfPresent(key);
     }
 }

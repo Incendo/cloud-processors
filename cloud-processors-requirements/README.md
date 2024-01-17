@@ -8,7 +8,20 @@ are defined on a per-command basis.
 
 ## Installation
 
-Cloud Requirements is not yet available on Maven Central.
+Snapshots are available on the Sonatype Snapshots Repository:
+
+```xml
+<repository>
+  <id>sonatype-snapshots</id>
+  <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+</repository>
+
+<dependency>
+    <groupId>org.incendo</groupId>
+    <artifactId>cloud-processors-requirements</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+</dependency>
+```
 
 ## Usage
 

@@ -68,8 +68,8 @@ public final class ConfirmationManager<C> implements Command.Builder.Applicable<
     private final ConfirmationConfiguration<C> configuration;
 
     private ConfirmationManager(final @NonNull ConfirmationConfiguration<C> configuration) {
-        this.cache = configuration.cache();
-        this.configuration = configuration;
+        this.cache = Objects.requireNonNull(configuration.cache(), "cache");
+        this.configuration = Objects.requireNonNull(configuration, "configuration");
     }
 
     /**
@@ -119,6 +119,8 @@ public final class ConfirmationManager<C> implements Command.Builder.Applicable<
      * @return optional containing the value if it exists and has not yet expired
      */
     public @NonNull Optional<ConfirmationContext<C>> popPending(final @NonNull C sender) {
+        Objects.requireNonNull(sender, "sender");
+
         final ConfirmationContext<C> context = this.cache.popIfPresent(sender);
         if (context == null) {
             return Optional.empty();
@@ -142,6 +144,8 @@ public final class ConfirmationManager<C> implements Command.Builder.Applicable<
      * @param context confirmation context
      */
     void addPending(final @NonNull C sender, final @NonNull ConfirmationContext<C> context) {
+        Objects.requireNonNull(sender, "sender");
+        Objects.requireNonNull(context, "context");
         this.cache.put(sender, context);
     }
 }

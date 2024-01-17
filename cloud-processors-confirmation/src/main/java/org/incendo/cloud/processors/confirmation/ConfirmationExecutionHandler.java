@@ -25,6 +25,7 @@ package org.incendo.cloud.processors.confirmation;
 
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.execution.CommandExecutionHandler;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import org.apiguardian.api.API;
@@ -42,7 +43,7 @@ final class ConfirmationExecutionHandler<C> implements CommandExecutionHandler.F
     private final ConfirmationManager<C> confirmationManager;
 
     ConfirmationExecutionHandler(final @NonNull ConfirmationManager<C> confirmationManager) {
-        this.confirmationManager = confirmationManager;
+        this.confirmationManager = Objects.requireNonNull(confirmationManager, "confirmationManager");
     }
 
     @Override

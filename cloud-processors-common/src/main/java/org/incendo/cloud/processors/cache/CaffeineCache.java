@@ -24,6 +24,7 @@
 package org.incendo.cloud.processors.cache;
 
 import com.github.benmanes.caffeine.cache.Cache;
+import java.util.Objects;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -53,21 +54,25 @@ public final class CaffeineCache<K, V> implements CloudCache<K, V> {
     private final Cache<K, V> cache;
 
     private CaffeineCache(final @NonNull Cache<K, V> cache) {
-        this.cache = cache;
+        this.cache = Objects.requireNonNull(cache, "cache");
     }
 
     @Override
     public void delete(final @NonNull K key) {
+        Objects.requireNonNull(key, "key");
         this.cache.invalidate(key);
     }
 
     @Override
     public void put(final @NonNull K key, final @NonNull V value) {
+        Objects.requireNonNull(key, "key");
+        Objects.requireNonNull(value, "value");
         this.cache.put(key, value);
     }
 
     @Override
     public @Nullable V getIfPresent(final @NonNull K key) {
+        Objects.requireNonNull(key, "key");
         return this.cache.getIfPresent(key);
     }
 }

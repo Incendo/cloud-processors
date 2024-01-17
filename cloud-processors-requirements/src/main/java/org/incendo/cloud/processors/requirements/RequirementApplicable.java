@@ -98,6 +98,7 @@ public final class RequirementApplicable<C, R extends Requirement<C, R>> impleme
          * @return the {@link RequirementApplicable} instance
          */
         public @NonNull RequirementApplicable<C, R> create(final @NonNull Requirements<C, R> requirements) {
+            Objects.requireNonNull(requirements, "requirements");
             return new RequirementApplicable<>(this.requirementKey, requirements);
         }
 
@@ -108,6 +109,7 @@ public final class RequirementApplicable<C, R extends Requirement<C, R>> impleme
          * @return the {@link RequirementApplicable} instance
          */
         public @NonNull RequirementApplicable<C, R> create(final @NonNull List<@NonNull R> requirements) {
+            Objects.requireNonNull(requirements, "requirements");
             return new RequirementApplicable<>(this.requirementKey, Requirements.of(requirements));
         }
 
@@ -120,6 +122,7 @@ public final class RequirementApplicable<C, R extends Requirement<C, R>> impleme
         @SafeVarargs
         @SuppressWarnings("varargs")
         public final @NonNull RequirementApplicable<C, R> create(final @NonNull R @NonNull... requirements) {
+            Objects.requireNonNull(requirements, "requirements");
             return new RequirementApplicable<>(this.requirementKey, Requirements.of(requirements));
         }
     }

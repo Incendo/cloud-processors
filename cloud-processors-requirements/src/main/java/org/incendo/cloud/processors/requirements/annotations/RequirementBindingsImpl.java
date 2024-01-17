@@ -55,6 +55,8 @@ final class RequirementBindingsImpl<C, R extends Requirement<C, R>> implements R
             final @NonNull Class<A> annotation,
             final @NonNull Function<A, R> requirement
     ) {
+        Objects.requireNonNull(annotation, "annotation");
+        Objects.requireNonNull(requirement, "requirement");
         this.annotationParser.registerBuilderModifier(annotation, new RequirementBuilderModifier<>(requirement));
         return this;
     }

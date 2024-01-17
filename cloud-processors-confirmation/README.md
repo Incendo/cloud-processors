@@ -4,7 +4,20 @@ Postprocessor that adds the ability to require an extra confirmation before exec
 
 ## Installation
 
-cloud-processors-confirmation is not yet available on Maven Central.
+Snapshots are available on the Sonatype Snapshots Repository:
+
+```xml
+<repository>
+  <id>sonatype-snapshots</id>
+  <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+</repository>
+
+<dependency>
+    <groupId>org.incendo</groupId>
+    <artifactId>cloud-processors-confirmation</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+</dependency>
+```
 
 ## Usage
 
