@@ -34,5 +34,4 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.jupiter)
     testImplementation(libs.truth)
-    testImplementation(libs.truth.java8)
 }
