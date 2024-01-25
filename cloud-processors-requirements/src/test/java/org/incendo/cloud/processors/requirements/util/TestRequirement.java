@@ -23,11 +23,11 @@
 //
 package org.incendo.cloud.processors.requirements.util;
 
-import cloud.commandframework.context.CommandContext;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.processors.requirements.Requirement;
 
 public enum TestRequirement implements Requirement<TestCommandSender, TestRequirement> {

@@ -23,16 +23,16 @@
 //
 package org.incendo.cloud.processors.requirements.annotations;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.annotations.AnnotationParser;
-import cloud.commandframework.annotations.Command;
-import cloud.commandframework.execution.CommandExecutionHandler;
-import cloud.commandframework.keys.CloudKey;
 import io.leangen.geantyref.TypeToken;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.annotations.AnnotationParser;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.execution.CommandExecutionHandler;
+import org.incendo.cloud.key.CloudKey;
 import org.incendo.cloud.processors.requirements.RequirementFailureHandler;
 import org.incendo.cloud.processors.requirements.RequirementPostprocessor;
 import org.incendo.cloud.processors.requirements.Requirements;
@@ -82,7 +82,7 @@ class RequirementBindingsTest {
         );
 
         // Act
-        final cloud.commandframework.Command<TestCommandSender> command =
+        final org.incendo.cloud.Command<TestCommandSender> command =
                 this.annotationParser.parse(new TestClass()).stream().findFirst().orElseThrow();
 
         // Assert

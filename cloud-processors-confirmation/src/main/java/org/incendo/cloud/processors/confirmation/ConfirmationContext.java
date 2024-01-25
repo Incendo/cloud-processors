@@ -23,11 +23,11 @@
 //
 package org.incendo.cloud.processors.confirmation;
 
-import cloud.commandframework.Command;
 import java.time.Instant;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.immutables.value.Value;
+import org.incendo.cloud.Command;
 import org.incendo.cloud.processors.immutables.ImmutableImpl;
 
 /**

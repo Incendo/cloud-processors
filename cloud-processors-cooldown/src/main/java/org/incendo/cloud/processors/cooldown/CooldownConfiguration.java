@@ -23,8 +23,6 @@
 //
 package org.incendo.cloud.processors.cooldown;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.context.CommandContext;
 import java.time.Clock;
 import java.util.List;
 import java.util.function.Function;
@@ -32,6 +30,8 @@ import java.util.function.Predicate;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.immutables.value.Value;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.processors.cooldown.listener.CooldownActiveListener;
 import org.incendo.cloud.processors.cooldown.listener.CooldownCreationListener;
 import org.incendo.cloud.processors.cooldown.profile.CooldownProfileFactory;

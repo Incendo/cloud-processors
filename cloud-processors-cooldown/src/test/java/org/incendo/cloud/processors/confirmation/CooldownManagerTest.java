@@ -23,13 +23,13 @@
 //
 package org.incendo.cloud.processors.confirmation;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.execution.CommandExecutionHandler;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.execution.CommandExecutionHandler;
 import org.incendo.cloud.processors.confirmation.util.TestCommandManager;
 import org.incendo.cloud.processors.confirmation.util.TestCommandSender;
 import org.incendo.cloud.processors.cooldown.Cooldown;

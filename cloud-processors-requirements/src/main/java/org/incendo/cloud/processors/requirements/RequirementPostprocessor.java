@@ -23,13 +23,13 @@
 //
 package org.incendo.cloud.processors.requirements;
 
-import cloud.commandframework.execution.postprocessor.CommandPostprocessingContext;
-import cloud.commandframework.execution.postprocessor.CommandPostprocessor;
-import cloud.commandframework.keys.CloudKey;
-import cloud.commandframework.services.types.ConsumerService;
 import java.util.Objects;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.execution.postprocessor.CommandPostprocessingContext;
+import org.incendo.cloud.execution.postprocessor.CommandPostprocessor;
+import org.incendo.cloud.key.CloudKey;
+import org.incendo.cloud.services.type.ConsumerService;
 
 /**
  * {@link CommandPostprocessor} that checks for {@link Requirement requirements} before the commands are executed.
@@ -46,7 +46,7 @@ public final class RequirementPostprocessor<C, R extends Requirement<C, R>> impl
      *
      * @param <C>            command sender type
      * @param <R>            requirement type
-     * @param requirementKey key that is used to store the requirements in the {@link cloud.commandframework.meta.CommandMeta}
+     * @param requirementKey key that is used to store the requirements in the {@link org.incendo.cloud.meta.CommandMeta}
      * @param failureHandler handler that gets invoked when a requirement is unmet
      * @return the postprocessor
      */

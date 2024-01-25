@@ -23,13 +23,13 @@
 //
 package org.incendo.cloud.processors.confirmation;
 
-import cloud.commandframework.execution.postprocessor.CommandPostprocessingContext;
-import cloud.commandframework.execution.postprocessor.CommandPostprocessor;
-import cloud.commandframework.services.types.ConsumerService;
 import java.time.Instant;
 import java.util.Objects;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.execution.postprocessor.CommandPostprocessingContext;
+import org.incendo.cloud.execution.postprocessor.CommandPostprocessor;
+import org.incendo.cloud.services.type.ConsumerService;
 
 /**
  * {@link CommandPostprocessor} for {@link ConfirmationManager}.

@@ -23,10 +23,10 @@
 //
 package org.incendo.cloud.processors.cooldown.listener;
 
-import cloud.commandframework.Command;
 import java.time.Duration;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
 import org.incendo.cloud.processors.cooldown.CooldownInstance;
 
 /**

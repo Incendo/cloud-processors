@@ -23,10 +23,10 @@
 //
 package org.incendo.cloud.processors.cooldown;
 
-import cloud.commandframework.context.CommandContext;
 import java.time.Duration;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
 
 /**
  * A function that generates a duration from a command context.

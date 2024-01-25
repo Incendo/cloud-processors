@@ -23,16 +23,16 @@
 //
 package org.incendo.cloud.processors.requirements.annotations;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.annotations.AnnotationParser;
-import cloud.commandframework.annotations.BuilderModifier;
-import cloud.commandframework.keys.CloudKey;
 import java.lang.annotation.Annotation;
 import java.util.Objects;
 import java.util.function.Function;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.common.returnsreceiver.qual.This;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.annotations.AnnotationParser;
+import org.incendo.cloud.annotations.BuilderModifier;
+import org.incendo.cloud.key.CloudKey;
 import org.incendo.cloud.processors.requirements.Requirement;
 import org.incendo.cloud.processors.requirements.Requirements;
 

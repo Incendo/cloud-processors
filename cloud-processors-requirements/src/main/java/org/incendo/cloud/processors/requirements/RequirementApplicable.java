@@ -23,12 +23,12 @@
 //
 package org.incendo.cloud.processors.requirements;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.keys.CloudKey;
 import java.util.List;
 import java.util.Objects;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.key.CloudKey;
 
 /**
  * Utility for adding {@link Requirements} to a {@link Command.Builder}.

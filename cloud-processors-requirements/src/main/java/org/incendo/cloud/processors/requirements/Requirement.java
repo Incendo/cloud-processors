@@ -23,10 +23,10 @@
 //
 package org.incendo.cloud.processors.requirements;
 
-import cloud.commandframework.context.CommandContext;
 import java.util.List;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
 
 /**
  * A requirement for a command to be executed.

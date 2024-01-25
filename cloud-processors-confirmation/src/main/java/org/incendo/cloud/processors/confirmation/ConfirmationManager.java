@@ -23,16 +23,16 @@
 //
 package org.incendo.cloud.processors.confirmation;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.execution.CommandExecutionHandler;
-import cloud.commandframework.execution.postprocessor.CommandPostprocessor;
-import cloud.commandframework.keys.CloudKey;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.execution.CommandExecutionHandler;
+import org.incendo.cloud.execution.postprocessor.CommandPostprocessor;
+import org.incendo.cloud.key.CloudKey;
 import org.incendo.cloud.processors.cache.CloudCache;
 
 /**
@@ -45,7 +45,7 @@ import org.incendo.cloud.processors.cache.CloudCache;
 public final class ConfirmationManager<C> implements Command.Builder.Applicable<C> {
 
     /**
-     * {@link cloud.commandframework.meta.CommandMeta} key that indicates that the command requires a confirmation
+     * {@link org.incendo.cloud.meta.CommandMeta} key that indicates that the command requires a confirmation
      * to be executed.
      */
     public static final CloudKey<Boolean> META_CONFIRMATION_REQUIRED = CloudKey.of(

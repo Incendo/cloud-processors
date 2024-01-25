@@ -23,11 +23,11 @@
 //
 package org.incendo.cloud.processors.requirements;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.execution.CommandExecutionHandler;
-import cloud.commandframework.keys.CloudKey;
 import io.leangen.geantyref.TypeToken;
 import java.util.concurrent.CompletableFuture;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.execution.CommandExecutionHandler;
+import org.incendo.cloud.key.CloudKey;
 import org.incendo.cloud.processors.requirements.util.TestCommandManager;
 import org.incendo.cloud.processors.requirements.util.TestCommandSender;
 import org.incendo.cloud.processors.requirements.util.TestRequirement;

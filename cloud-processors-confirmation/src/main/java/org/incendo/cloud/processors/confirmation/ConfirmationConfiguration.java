@@ -23,7 +23,6 @@
 //
 package org.incendo.cloud.processors.confirmation;
 
-import cloud.commandframework.context.CommandContext;
 import java.time.Duration;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -32,6 +31,7 @@ import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.immutables.value.Value;
+import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.processors.cache.CloudCache;
 import org.incendo.cloud.processors.immutables.StagedImmutableBuilder;
 

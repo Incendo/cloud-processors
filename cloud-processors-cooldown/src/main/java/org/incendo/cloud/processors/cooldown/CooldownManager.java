@@ -23,12 +23,12 @@
 //
 package org.incendo.cloud.processors.cooldown;
 
-import cloud.commandframework.execution.postprocessor.CommandPostprocessor;
-import cloud.commandframework.keys.CloudKey;
 import io.leangen.geantyref.TypeToken;
 import java.util.Objects;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.execution.postprocessor.CommandPostprocessor;
+import org.incendo.cloud.key.CloudKey;
 
 /**
  * Manager for the cooldown system.

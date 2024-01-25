@@ -23,9 +23,9 @@
 //
 package org.incendo.cloud.processors.requirements;
 
-import cloud.commandframework.context.CommandContext;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
 
 /**
  * Handler that gets invoked when a {@link Requirement requirement} is not met.

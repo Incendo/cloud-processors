@@ -23,12 +23,12 @@
 //
 package org.incendo.cloud.processors.confirmation;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.execution.CommandExecutionHandler;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.execution.CommandExecutionHandler;
 import org.incendo.cloud.processors.cache.SimpleCache;
 import org.incendo.cloud.processors.confirmation.util.TestCommandManager;
 import org.incendo.cloud.processors.confirmation.util.TestCommandSender;
