@@ -11,6 +11,7 @@ are defined on a per-command basis.
 Snapshots are available on the Sonatype Snapshots Repository:
 
 ```xml
+<!-- For snapshot releases -->
 <repository>
   <id>sonatype-snapshots</id>
   <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
@@ -19,7 +20,7 @@ Snapshots are available on the Sonatype Snapshots Repository:
 <dependency>
     <groupId>org.incendo</groupId>
     <artifactId>cloud-processors-requirements</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-beta.1</version>
 </dependency>
 ```
 

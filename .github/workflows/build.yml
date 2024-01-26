@@ -5,7 +5,7 @@ on:
     tags-ignore: [ "**" ]
   pull_request:
   release:
-    types: [ released ]
+    types: [ published ]
 jobs:
   build:
     # Only run on PRs if the source branch is on someone else's repo
@@ -31,9 +31,9 @@ jobs:
       - name: Determine Status
         run: |
           if [ "$(./gradlew properties | awk '/^version:/ { print $2; }' | grep '\-SNAPSHOT')" ]; then
-            echo "STATUS=snapshot" >> $GITHUB_ENV
+          echo "STATUS=snapshot" >> $GITHUB_ENV
           else
-            echo "STATUS=release" >> $GITHUB_ENV
+          echo "STATUS=release" >> $GITHUB_ENV
           fi
       - name: Publish Snapshot
         if: "${{ env.STATUS != 'release' && github.event_name == 'push' && github.ref == 'refs/heads/master' }}"
@@ -49,3 +49,14 @@ jobs:
           ORG_GRADLE_PROJECT_sonatypePassword: "${{ secrets.SONATYPE_PASSWORD }}"
           ORG_GRADLE_PROJECT_signingKey: "${{ secrets.SIGNING_KEY }}"
           ORG_GRADLE_PROJECT_signingPassword: "${{ secrets.SIGNING_PASSWORD }}"
+  event_file:
+    name: "Event File"
+    # Only run on PRs if the source branch is on someone else's repo
+    if: ${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: Event File
+          path: ${{ github.event_path }}
