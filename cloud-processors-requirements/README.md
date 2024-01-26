@@ -20,7 +20,7 @@ Snapshots are available on the Sonatype Snapshots Repository:
 <dependency>
     <groupId>org.incendo</groupId>
     <artifactId>cloud-processors-requirements</artifactId>
-    <version>1.0.0-beta.1</version>
+    <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
