@@ -21,7 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.requirements.annotations;
+package org.incendo.cloud.processors.requirements.annotation;
 
 import java.lang.annotation.Annotation;
 import java.util.function.Function;

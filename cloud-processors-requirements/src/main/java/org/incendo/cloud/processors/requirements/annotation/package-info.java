@@ -27,4 +27,4 @@
  *
  * <p>This requires cloud-annotations to be on the classpath.</p>
  */
-package org.incendo.cloud.processors.requirements.annotations;
+package org.incendo.cloud.processors.requirements.annotation;

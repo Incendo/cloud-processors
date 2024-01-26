@@ -21,7 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.cooldown.annotations;
+package org.incendo.cloud.processors.cooldown.annotation;
 
 import java.time.Duration;
 import org.apiguardian.api.API;

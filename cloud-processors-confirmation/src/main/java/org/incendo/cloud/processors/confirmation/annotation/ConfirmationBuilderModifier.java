@@ -21,7 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.processors.confirmation.annotations;
+package org.incendo.cloud.processors.confirmation.annotation;
 
 import java.util.Objects;
 import org.apiguardian.api.API;
