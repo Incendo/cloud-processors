@@ -33,7 +33,6 @@ import org.incendo.cloud.execution.CommandExecutionHandler;
 import org.incendo.cloud.processors.confirmation.util.TestCommandManager;
 import org.incendo.cloud.processors.confirmation.util.TestCommandSender;
 import org.incendo.cloud.processors.cooldown.Cooldown;
-import org.incendo.cloud.processors.cooldown.CooldownConfiguration;
 import org.incendo.cloud.processors.cooldown.CooldownGroup;
 import org.incendo.cloud.processors.cooldown.CooldownInstance;
 import org.incendo.cloud.processors.cooldown.CooldownManager;
@@ -76,14 +75,11 @@ class CooldownManagerTest {
     @BeforeEach
     void setup() {
         this.commandManager = new TestCommandManager();
-        this.cooldownManager = CooldownManager.of(
-                CooldownConfiguration.<TestCommandSender>builder()
-                        .repository(CooldownRepository.forMap(new HashMap<>()))
+        this.cooldownManager = CooldownManager.cooldownManager(configBuilder ->
+                configBuilder.repository(CooldownRepository.forMap(new HashMap<>()))
                         .addActiveCooldownListener(this.notifier)
                         .clock(this.clock)
-                        .addCreationListener(this.listener)
-                        .build()
-        );
+                        .addCreationListener(this.listener));
         this.commandManager.registerCommandPostProcessor(this.cooldownManager.createPostprocessor());
     }
 

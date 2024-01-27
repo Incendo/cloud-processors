@@ -63,12 +63,11 @@ class ConfirmationManagerTest {
     @BeforeEach
     void setup() {
         this.commandManager = new TestCommandManager();
-        this.confirmationManager = ConfirmationManager.of(
-                ConfirmationConfiguration.<TestCommandSender>builder()
+        this.confirmationManager = ConfirmationManager.confirmationManager(
+                configBuilder -> configBuilder
                         .cache(SimpleCache.of())
                         .noPendingCommandNotifier(this.noPendingCommandNotifier)
                         .confirmationRequiredNotifier(this.confirmationRequiredNotifier)
-                        .build()
         );
         this.commandManager.registerCommandPostProcessor(this.confirmationManager.createPostprocessor());
     }

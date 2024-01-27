@@ -25,6 +25,7 @@ package org.incendo.cloud.processors.cooldown;
 
 import io.leangen.geantyref.TypeToken;
 import java.util.Objects;
+import java.util.function.Function;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.execution.postprocessor.CommandPostprocessor;
@@ -49,14 +50,28 @@ public final class CooldownManager<C> {
     );
 
     /**
-     * Creates a new confirmation manager using the given {@code configuration}.
+     * Creates a new cooldown manager using the given {@code configuration}.
      *
      * @param <C>           command sender type
-     * @param configuration configuration for the confirmation manager
+     * @param configuration configuration for the cooldown manager
      * @return the created manager
      */
-    public static <C> @NonNull CooldownManager<C> of(final @NonNull CooldownConfiguration<C> configuration) {
+    public static <C> @NonNull CooldownManager<C> cooldownManager(final @NonNull CooldownConfiguration<C> configuration) {
         return new CooldownManager<>(Objects.requireNonNull(configuration, "configuration"));
+    }
+
+    /**
+     * Creates a new cooldown manager using the given {@code configuration}.
+     *
+     * @param <C>           command sender type
+     * @param configuration configuration for the cooldown manager
+     * @return the created manager
+     */
+    public static <C> @NonNull CooldownManager<C> cooldownManager(
+            final @NonNull Function<ImmutableCooldownConfiguration.RepositoryBuildStage<C>,
+                    ImmutableCooldownConfiguration.BuildFinal<C>> configuration
+    ) {
+        return cooldownManager(configuration.apply(CooldownConfiguration.builder()).build());
     }
 
     private final CooldownRepository<C> repository;
