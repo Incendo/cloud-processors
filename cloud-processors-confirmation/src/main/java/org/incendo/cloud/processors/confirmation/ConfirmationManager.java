@@ -27,6 +27,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
@@ -60,8 +61,22 @@ public final class ConfirmationManager<C> implements Command.Builder.Applicable<
      * @param configuration configuration for the confirmation manager
      * @return the created manager
      */
-    public static <C> @NonNull ConfirmationManager<C> of(final @NonNull ConfirmationConfiguration<C> configuration) {
+    public static <C> @NonNull ConfirmationManager<C> confirmationManager(final @NonNull ConfirmationConfiguration<C> configuration) {
         return new ConfirmationManager<>(Objects.requireNonNull(configuration, "configuration"));
+    }
+
+    /**
+     * Creates a new confirmation manager using the given {@code configuration}.
+     *
+     * @param <C>           command sender type
+     * @param configuration configuration for the confirmation manager
+     * @return the created manager
+     */
+    public static <C> @NonNull ConfirmationManager<C> confirmationManager(
+            final @NonNull Function<ImmutableConfirmationConfiguration.@NonNull CacheBuildStage<C>,
+                    ImmutableConfirmationConfiguration.@NonNull BuildFinal<C>> configuration
+    ) {
+        return confirmationManager(configuration.apply(ConfirmationConfiguration.builder()).build());
     }
 
     private final CloudCache<C, ConfirmationContext<C>> cache;
