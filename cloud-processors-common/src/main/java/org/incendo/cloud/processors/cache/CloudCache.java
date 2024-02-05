@@ -24,9 +24,12 @@
 package org.incendo.cloud.processors.cache;
 
 import java.util.Optional;
+import java.util.function.Function;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Something that caches values.
@@ -88,5 +91,42 @@ public interface CloudCache<K, V> {
      */
     default @NonNull Optional<V> get(final @NonNull K key) {
         return Optional.ofNullable(this.getIfPresent(key));
+    }
+
+    /**
+     * Returns a view of this cache with an adapted key type.
+     *
+     * @param keyExtractor key extractor
+     * @param <K1>         key type for the view
+     * @return new view
+     */
+    default <K1> @NonNull CloudCache<K1, V> keyExtractingView(final @NonNull Function<K1, K> keyExtractor) {
+        requireNonNull(keyExtractor, "keyExtractor");
+        return new CloudCache<>() {
+            @Override
+            public void delete(final @NonNull K1 key) {
+                CloudCache.this.delete(keyExtractor.apply(key));
+            }
+
+            @Override
+            public void put(final @NonNull K1 key, final @NonNull V value) {
+                CloudCache.this.put(keyExtractor.apply(key), value);
+            }
+
+            @Override
+            public @Nullable V getIfPresent(final @NonNull K1 key) {
+                return CloudCache.this.getIfPresent(keyExtractor.apply(key));
+            }
+
+            @Override
+            public @Nullable V popIfPresent(final @NonNull K1 key) {
+                return CloudCache.this.popIfPresent(keyExtractor.apply(key));
+            }
+
+            @Override
+            public @NonNull Optional<V> get(final @NonNull K1 key) {
+                return CloudCache.this.get(keyExtractor.apply(key));
+            }
+        };
     }
 }
