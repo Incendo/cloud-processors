@@ -23,6 +23,7 @@
 //
 package org.incendo.cloud.processors.cache;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.WeakHashMap;
@@ -55,7 +56,7 @@ public final class SimpleCache<K, V> implements CloudCache<K, V> {
         return new SimpleCache<>();
     }
 
-    private final Map<K, V> map = new WeakHashMap<>();
+    private final Map<K, V> map = Collections.synchronizedMap(new WeakHashMap<>());
 
     @Override
     public void delete(final @NonNull K key) {
