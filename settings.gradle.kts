@@ -26,7 +26,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "cloud-processors-parent"
 
-include(":cloud-processors-common")
-include(":cloud-processors-confirmation")
-include(":cloud-processors-cooldown")
-include(":cloud-processors-requirements")
+include("cloud-processors-bom")
+
+include("cloud-processors-common")
+include("cloud-processors-confirmation")
+include("cloud-processors-cooldown")
+include("cloud-processors-requirements")
