@@ -39,7 +39,7 @@ import org.incendo.cloud.processors.cooldown.DurationFunction;
  * @since 1.0.0
  */
 @API(status = API.Status.STABLE, since = "1.0.0")
-public final class CoooldownBuilderModifier<C> implements BuilderModifier<Cooldown, C> {
+public final class CooldownBuilderModifier<C> implements BuilderModifier<Cooldown, C> {
 
     /**
      * Creates a new builder modifier that will add the cooldown metadata to the command builder.
@@ -48,7 +48,7 @@ public final class CoooldownBuilderModifier<C> implements BuilderModifier<Cooldo
      * @return the builder modifier
      */
     public static <C> @NonNull BuilderModifier<Cooldown, C> of() {
-        return new CoooldownBuilderModifier<>();
+        return new CooldownBuilderModifier<>();
     }
 
     /**
@@ -61,7 +61,7 @@ public final class CoooldownBuilderModifier<C> implements BuilderModifier<Cooldo
         annotationParser.registerBuilderModifier(Cooldown.class, of());
     }
 
-    private CoooldownBuilderModifier() {
+    private CooldownBuilderModifier() {
     }
 
     @Override
