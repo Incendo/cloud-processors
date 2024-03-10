@@ -21,7 +21,7 @@ immutables = "2.10.1"
 jupiterEngine = "5.10.2"
 mockitoCore = "5.11.0"
 mockitoJupiter = "5.11.0"
-truth = "1.4.0"
+truth = "1.4.2"
 
 [libraries]
 cloud-build-logic = { module = "org.incendo:cloud-build-logic", version.ref = "cloud-build-logic" }
