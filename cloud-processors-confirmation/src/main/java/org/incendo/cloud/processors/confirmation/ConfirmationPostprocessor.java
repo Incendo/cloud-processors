@@ -56,7 +56,9 @@ final class ConfirmationPostprocessor<C> implements CommandPostprocessor<C> {
             return;
         }
 
-        final ConfirmationContext<C> confirmationContext = ConfirmationContext.of(Instant.now(), context.command());
+        final ConfirmationContext<C> confirmationContext = ConfirmationContext.of(
+                Instant.now(), context.command(), context.commandContext()
+        );
         this.confirmationManager.addPending(context.commandContext().sender(), confirmationContext);
         this.confirmationManager.configuration().confirmationRequiredNotifier().accept(
                 context.commandContext().sender(),

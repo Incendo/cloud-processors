@@ -28,6 +28,7 @@ import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.immutables.value.Value;
 import org.incendo.cloud.Command;
+import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.processors.immutables.ImmutableImpl;
 
 /**
@@ -44,16 +45,18 @@ public interface ConfirmationContext<C> {
     /**
      * Creates a new confirmation context.
      *
-     * @param <C>          command sender type
-     * @param creationTime time of creation
-     * @param command      command that requires confirmation
+     * @param <C>            command sender type
+     * @param creationTime   time of creation
+     * @param command        command that requires confirmation
+     * @param commandContext command context that requires confirmation
      * @return the created context
      */
     static <C> @NonNull ConfirmationContext<C> of(
             final @NonNull Instant creationTime,
-            final @NonNull Command<C> command
+            final @NonNull Command<C> command,
+            final @NonNull CommandContext<C> commandContext
     ) {
-        return ConfirmationContextImpl.of(creationTime, command);
+        return ConfirmationContextImpl.of(creationTime, command, commandContext);
     }
 
     /**
@@ -69,4 +72,11 @@ public interface ConfirmationContext<C> {
      * @return the command
      */
     @NonNull Command<C> command();
+
+    /**
+     * Returns the execution context that required confirmation.
+     *
+     * @return the command context
+     */
+    @NonNull CommandContext<C> commandContext();
 }

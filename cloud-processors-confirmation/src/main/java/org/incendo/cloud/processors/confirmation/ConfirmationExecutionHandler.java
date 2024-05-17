@@ -53,6 +53,6 @@ final class ConfirmationExecutionHandler<C> implements CommandExecutionHandler.F
             this.confirmationManager.configuration().noPendingCommandNotifier().accept(commandContext.sender());
             return CompletableFuture.completedFuture(null);
         }
-        return pending.get().command().commandExecutionHandler().executeFuture(commandContext);
+        return pending.get().command().commandExecutionHandler().executeFuture(pending.get().commandContext());
     }
 }
