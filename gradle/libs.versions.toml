@@ -19,8 +19,8 @@ immutables = "2.10.1"
 
 # Test
 jupiterEngine = "5.11.0"
-mockitoCore = "5.12.0"
-mockitoJupiter = "5.12.0"
+mockitoCore = "5.14.2"
+mockitoJupiter = "5.14.2"
 truth = "1.4.4"
 
 [libraries]
