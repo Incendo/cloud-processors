@@ -35,3 +35,11 @@ dependencies {
     testImplementation(libs.mockito.jupiter)
     testImplementation(libs.truth)
 }
+
+tasks {
+    jar {
+        manifest {
+            attributes("Automatic-Module-Name" to "%s.%s".format(project.group, project.name.replace('-', '.')))
+        }
+    }
+}
