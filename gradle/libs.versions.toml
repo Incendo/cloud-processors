@@ -15,7 +15,7 @@ cloud = "2.0.0"
 # External
 caffeine = "3.1.8"
 guava = "33.3.0-jre"
-immutables = "2.10.1"
+immutables = "2.12.2"
 
 # Test
 jupiterEngine = "5.11.0"
