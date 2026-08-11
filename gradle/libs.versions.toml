@@ -10,7 +10,7 @@ checkstyle = "10.12.5"
 kotlin = "2.0.20"
 
 # Cloud
-cloud = "2.0.0"
+cloud = "2.1.0"
 
 # External
 caffeine = "3.1.8"
